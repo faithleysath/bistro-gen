@@ -1,0 +1,50 @@
+# Robots.txt for 伪精致Bistro生成器
+# 主域名: https://bistro.laysath.cn/
+# 备用域名: https://bistro-gen.vercel.app/
+
+User-agent: *
+Allow: /
+
+# 允许所有搜索引擎访问
+Allow: /api/
+Allow: /assets/
+Allow: /styles/
+Allow: /scripts/
+Allow: /templates/
+
+# 禁止访问敏感文件
+Disallow: /vendor/
+Disallow: /.env
+Disallow: /vercel.json
+Disallow: /.git/
+Disallow: /node_modules/
+
+# 网站地图 - 支持两个域名
+Sitemap: https://bistro.laysath.cn/sitemap.xml
+Sitemap: https://bistro-gen.vercel.app/sitemap.xml
+
+# 爬取延迟（毫秒）
+Crawl-delay: 1
+
+# 特定搜索引擎优化
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+# 社交媒体爬虫
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
