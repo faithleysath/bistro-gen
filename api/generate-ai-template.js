@@ -233,7 +233,7 @@ const TEMPLATE_EXAMPLES = {
 };
 
 async function callGoogleAIStreaming(input, type, apiKey, sendUpdate) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`;
 
     // 使用硬编码的模版示例
     const { elegantTemplate, minimalistTemplate } = TEMPLATE_EXAMPLES;

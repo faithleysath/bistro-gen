@@ -4,7 +4,7 @@ export const config = {
 
 // --- Streaming LLM Function ---
 async function callGoogleAIStreaming(identity, apiKey, sendUpdate) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`;
 
     const prompt = `
  "bistro主理人"是2025年中文互联网上一个热门的反讽梗，用来调侃一种过度包装、小资化、空有格调却缺乏实质的餐饮创业现象。
