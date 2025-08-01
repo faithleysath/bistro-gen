@@ -8,7 +8,7 @@
 
 ---
 
-![Screenshot](https://user-images.githubusercontent.com/your-id/your-image.png) <!-- 建议替换为项目截图 -->
+![Screenshot](./screenshot.png) <!-- 建议替换为项目截图 -->
 
 ## ✨ 特性
 

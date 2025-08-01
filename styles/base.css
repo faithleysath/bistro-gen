@@ -160,14 +160,30 @@ header .quote {
 }
 
 footer {
-    margin-top: 60px;
-    margin-bottom: 40px;
+    margin-top: 0px;
+    margin-bottom: 20px;
     font-size: 0.9em;
     color: var(--secondary-text);
 }
 
 footer p {
     margin: 4px 0;
+}
+
+.feedback-link-footer, .author-link-footer, .github-link-footer {
+    color: var(--brand-color);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.feedback-link-footer:hover, .author-link-footer:hover, .github-link-footer:hover {
+    background-color: rgba(30, 142, 62, 0.1);
+    transform: translateY(-1px);
+    text-decoration: none;
 }
 
 /* Menu Styles (re-integrated from minimalist theme) */
