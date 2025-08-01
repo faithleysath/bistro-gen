@@ -197,6 +197,12 @@ const response = await fetch('https://api.openai.com/v1/chat/completions', {
 - **减少动画**: 支持用户的动画偏好设置
 - **键盘导航**: 完整的键盘访问支持
 
+## 📸 项目截图
+
+<div align="center">
+  <img src="screenshot.png" alt="伪精致 Bistro 生成器主界面" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08); margin: 20px 0;">
+</div>
+
 ## 📸 使用示例
 
 ### 输入身份描述
@@ -205,6 +211,15 @@ const response = await fetch('https://api.openai.com/v1/chat/completions', {
 ```
 
 ### 生成的菜单效果
+
+<div align="center">
+  <img src="demo/程序员案例.png" alt="程序员主理人菜单示例1" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08); margin: 20px 0;">
+</div>
+
+<div align="center">
+  <img src="demo/程序员案例2.png" alt="程序员主理人菜单示例2" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08); margin: 20px 0;">
+</div>
+
 - **店铺名称**: "代码诗人的栖息地 Bistro"
 - **Slogan**: "在这里，每一次debug都是灵魂的重启"  
 - **招牌菜**: "重构人生的意式烩饭" - 如同重构代码般，每一粒米都经过精心优化
