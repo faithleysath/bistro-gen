@@ -37,6 +37,20 @@
                     <button class="btn-group-item" data-template="minimalist">极简</button>
                 </div>
             </div>
+            <div class="ai-template-controls">
+                <button id="create-ai-template-btn" class="btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L14.09 8.26L20 10.35L14.09 12.44L12 18.7L9.91 12.44L4 10.35L9.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    创建AI模版
+                </button>
+                <button id="manage-templates-btn" class="btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 7V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V7M3 7L5 21H19L21 7M3 7H21M9 11V17M15 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    管理模版
+                </button>
+            </div>
             <div class="size-controls">
                 <div class="slider-group">
                     <label for="width-slider">宽度: <span id="width-value">800</span>px</label>
@@ -59,6 +73,80 @@
     <div id="menu-container" style="display: none;">
         <!-- Image will be inserted here directly by script -->
         <p class="save-hint" style="display: none;">长按或右键点击图片即可保存</p>
+    </div>
+
+    <!-- AI模版创建弹窗 -->
+    <div id="ai-template-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>创建AI模版</h2>
+                <button class="modal-close" id="close-ai-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-method-selector">
+                    <div class="button-group">
+                        <button class="btn-group-item active" data-method="text">文字描述</button>
+                        <button class="btn-group-item" data-method="image">上传图片</button>
+                    </div>
+                </div>
+                
+                <div id="text-input-area" class="input-area-modal">
+                    <label for="template-description">描述你想要的菜单风格：</label>
+                    <textarea id="template-description" rows="4" placeholder="例如：现代简约风格，黑白配色，大字体标题，网格布局..."></textarea>
+                </div>
+                
+                <div id="image-input-area" class="input-area-modal" style="display: none;">
+                    <label>上传菜单图片：</label>
+                    <div class="image-upload-zone" id="image-upload-zone">
+                        <div class="upload-placeholder">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15M17 8L12 3M12 3L7 8M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <p>点击或拖拽图片到此处</p>
+                            <p class="upload-hint">支持 JPG, PNG 格式</p>
+                        </div>
+                        <input type="file" id="image-file-input" accept="image/*" style="display: none;">
+                        <div id="image-preview" style="display: none;">
+                            <img id="preview-image" src="" alt="预览图片">
+                            <button id="remove-image" class="btn-remove">移除图片</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="template-name-input">
+                    <label for="template-name">模版名称：</label>
+                    <input type="text" id="template-name" placeholder="我的自定义模版">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-ai-template" class="btn-secondary">取消</button>
+                <button id="generate-ai-template" class="btn-primary">生成模版</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模版管理弹窗 -->
+    <div id="template-manager-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>模版管理</h2>
+                <button class="modal-close" id="close-manager-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="template-manager-actions">
+                    <button id="import-template-btn" class="btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        导入模版
+                    </button>
+                    <input type="file" id="import-file-input" accept=".bistro-template" style="display: none;">
+                </div>
+                <div id="template-list" class="template-list">
+                    <!-- AI模版列表将在这里动态生成 -->
+                </div>
+            </div>
+        </div>
     </div>
     
     <footer>
