@@ -179,6 +179,16 @@ generateBtn.addEventListener('click', async () => {
                                         }
                                         
                                     case 'error':
+                                        // Show error progress bar
+                                        menuContainer.innerHTML = `
+                                            <div class="progress-container">
+                                                <p>思考被意外打断了....</p>
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 100%; background-color: #ff4757;"></div>
+                                                </div>
+                                                <p class="progress-text">错误</p>
+                                            </div>
+                                        `;
                                         throw new Error(data.details || data.error || 'Unknown error occurred');
                                         
                                     default:
@@ -209,7 +219,15 @@ generateBtn.addEventListener('click', async () => {
 
     } catch (error) {
         console.error('生成失败:', error);
-        menuContainer.innerHTML = `<div class="error"><p>糟糕，灵感枯竭了... 请稍后再试。</p><p class="error-details">${error.message}</p></div>`;
+        menuContainer.innerHTML = `
+            <div class="progress-container">
+                <p>思考被意外打断了....</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%; background-color: #ff4757;"></div>
+                </div>
+                <p class="progress-text">错误</p>
+            </div>
+        `;
     } finally {
         btnSpan.textContent = '生成我的 Bistro';
         generateBtn.disabled = false;
@@ -648,6 +666,16 @@ document.getElementById('generate-ai-template').addEventListener('click', async 
                                         return;
                                         
                                     case 'error':
+                                        // Show error progress bar in modal
+                                        progressContainer.innerHTML = `
+                                            <div class="progress-container">
+                                                <p>思考被意外打断了....</p>
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 100%; background-color: #ff4757;"></div>
+                                                </div>
+                                                <p class="progress-text">错误</p>
+                                            </div>
+                                        `;
                                         throw new Error(data.details || data.error);
                                 }
                             } catch (parseError) {
@@ -681,6 +709,19 @@ document.getElementById('generate-ai-template').addEventListener('click', async 
         
     } catch (error) {
         console.error('AI模版生成失败:', error);
+        // Show error progress bar in modal
+        const progressContainer = modalContent.querySelector('.ai-template-progress');
+        if (progressContainer) {
+            progressContainer.innerHTML = `
+                <div class="progress-container">
+                    <p>思考被意外打断了....</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%; background-color: #ff4757;"></div>
+                    </div>
+                    <p class="progress-text">错误</p>
+                </div>
+            `;
+        }
         alert(`模版生成失败: ${error.message}`);
     } finally {
         generateBtn.textContent = originalText;
