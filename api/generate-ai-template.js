@@ -233,7 +233,7 @@ const TEMPLATE_EXAMPLES = {
 };
 
 async function callGoogleAI(input, type, apiKey) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     // 使用硬编码的模版示例
     const { elegantTemplate, minimalistTemplate } = TEMPLATE_EXAMPLES;
@@ -279,9 +279,10 @@ ${minimalistTemplate}
 4. **Tailwind CSS**：必须引入 https://cdn.tailwindcss.com
 5. **数据处理**：正确处理菜单数据结构，包含合理的默认值
 6. **响应式设计**：使用Tailwind类实现移动端适配
-7. **错误处理**：对缺失数据提供默认值，确保代码健壮性
-8. **纯函数**：只生成function声明，不要包含任何其他语句、导入或class定义
-9. **语法正确**：确保生成的JavaScript代码语法完全正确，能够被eval()正常执行
+7. **风格体现**：充分体现图片分析得出的设计风格和特征
+8. **错误处理**：对缺失数据提供默认值，确保代码健壮性
+9. **纯函数**：只生成function声明，不要包含任何其他语句、导入或class定义
+10. **语法正确**：确保生成的JavaScript代码语法完全正确
 
 ## 菜单数据格式
 data = {
@@ -300,6 +301,7 @@ data = {
 - 样式完整，视觉效果良好
 - 数据绑定正确，支持动态内容
 - 代码结构清晰，易于维护
+- 充分体现图片分析得出的设计需求
 
 ## 特别注意事项
 - 不要生成任何class定义或export语句
@@ -363,6 +365,8 @@ ${minimalistTemplate}
 6. **响应式设计**：使用Tailwind类实现移动端适配
 7. **风格体现**：充分体现用户描述的设计风格和要求
 8. **错误处理**：对缺失数据提供默认值，确保代码健壮性
+9. **纯函数**：只生成function声明，不要包含任何其他语句、导入或class定义
+10. **语法正确**：确保生成的JavaScript代码语法完全正确
 
 ## 菜单数据格式
 data = {

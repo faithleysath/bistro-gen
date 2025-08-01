@@ -4,7 +4,7 @@ export const config = {
 
 // --- Real LLM Function ---
 async function callGoogleAI(identity, apiKey) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `
 # 🌿 Bistro主理人梗·菜单生成提示词
