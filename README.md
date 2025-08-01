@@ -1,6 +1,6 @@
 # Bistro 主理人梗·菜单生成器
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-username%2Fbistro-gen)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffaithleysath%2Fbistro-gen)
 
 一个充满乐趣的 Web 应用，可以根据你输入的身份，自动生成一份充满“Bistro 梗”风格的浮夸菜单。灵感来源于中文互联网上对“网红 Bistro”现象的调侃。
 
