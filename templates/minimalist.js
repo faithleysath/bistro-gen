@@ -21,9 +21,13 @@ function renderMinimalistTemplate(data) {
     };
 
     let menuHtml = '';
-    for (const category in data['菜单']) {
+    // 确保按照固定顺序渲染菜单分类：前菜、主菜、副菜、甜点
+    const orderedCategories = ['Appetizers', 'Main Courses', 'Side Dishes', 'Desserts'];
+    const categories = orderedCategories.filter(cat => data['菜单'][cat] && data['菜单'][cat].length > 0);
+    
+    categories.forEach(category => {
         menuHtml += generateCategoryHtml(category);
-    }
+    });
 
     return `
         <!DOCTYPE html>

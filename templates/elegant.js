@@ -3,7 +3,9 @@ function renderElegantTemplate(data) {
     const slogan = data['Slogan（中）'] || 'BREAKFAST : 7:30 AM - 10:30 AM || LUNCH : 11:00 AM - 3:30 PM';
 
     let menuHtml = '';
-    const categories = Object.keys(data['菜单']);
+    // 确保按照固定顺序渲染菜单分类：前菜、主菜、副菜、甜点
+    const orderedCategories = ['Appetizers', 'Main Courses', 'Side Dishes', 'Desserts'];
+    const categories = orderedCategories.filter(cat => data['菜单'][cat] && data['菜单'][cat].length > 0);
     
     // Split categories into two columns
     const midpoint = Math.ceil(categories.length / 2);

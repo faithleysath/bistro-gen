@@ -9,7 +9,9 @@ const TEMPLATE_EXAMPLES = {
     const slogan = data['Slogan（中）'] || 'BREAKFAST : 7:30 AM - 10:30 AM || LUNCH : 11:00 AM - 3:30 PM';
 
     let menuHtml = '';
-    const categories = Object.keys(data['菜单']);
+    // 确保按照固定顺序渲染菜单分类：前菜、主菜、副菜、甜点
+    const orderedCategories = ['Appetizers', 'Main Courses', 'Side Dishes', 'Desserts'];
+    const categories = orderedCategories.filter(cat => data['菜单'][cat] && data['菜单'][cat].length > 0);
     
     // Split categories into two columns
     const midpoint = Math.ceil(categories.length / 2);
@@ -126,9 +128,13 @@ const TEMPLATE_EXAMPLES = {
     };
 
     let menuHtml = '';
-    for (const category in data['菜单']) {
+    // 确保按照固定顺序渲染菜单分类：前菜、主菜、副菜、甜点
+    const orderedCategories = ['Appetizers', 'Main Courses', 'Side Dishes', 'Desserts'];
+    const categories = orderedCategories.filter(cat => data['菜单'][cat] && data['菜单'][cat].length > 0);
+    
+    categories.forEach(category => {
         menuHtml += generateCategoryHtml(category);
-    }
+    });
 
     return \`
         <!DOCTYPE html>
@@ -283,6 +289,7 @@ ${minimalistTemplate}
 8. **错误处理**：对缺失数据提供默认值，确保代码健壮性
 9. **纯函数**：只生成function声明，不要包含任何其他语句、导入或class定义
 10. **语法正确**：确保生成的JavaScript代码语法完全正确
+11. **菜单顺序**：必须按照固定顺序渲染菜单分类：Appetizers（前菜）→ Main Courses（主菜）→ Side Dishes（副菜）→ Desserts（甜点），不能使用for...in循环遍历菜单对象
 
 ## 菜单数据格式
 data = {
@@ -370,6 +377,7 @@ ${minimalistTemplate}
 8. **错误处理**：对缺失数据提供默认值，确保代码健壮性
 9. **纯函数**：只生成function声明，不要包含任何其他语句、导入或class定义
 10. **语法正确**：确保生成的JavaScript代码语法完全正确
+11. **菜单顺序**：必须按照固定顺序渲染菜单分类：Appetizers（前菜）→ Main Courses（主菜）→ Side Dishes（副菜）→ Desserts（甜点），不能使用for...in循环遍历菜单对象
 
 ## 菜单数据格式
 data = {
