@@ -19,25 +19,17 @@ body.minimalist-template {
     text-align: center;
     margin-top: 3rem;
     margin-bottom: 3rem;
-    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .minimalist-template .menu-section-title::before,
 .minimalist-template .menu-section-title::after {
     content: '';
-    position: absolute;
-    top: 50%;
-    width: 30%;
+    flex-grow: 1;
     height: 1px;
     background-color: #ccc;
-}
-
-.minimalist-template .menu-section-title::before {
-    left: 0;
-}
-
-.minimalist-template .menu-section-title::after {
-    right: 0;
 }
 
 .minimalist-template .item-name {

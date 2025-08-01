@@ -4,7 +4,7 @@ function renderMinimalistTemplate(data) {
 
     const generateCategoryHtml = (categoryName) => {
         const items = data['菜单'][categoryName];
-        let categoryHtml = `<section><h2 class="menu-section-title">${categoryName}</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">`;
+        let categoryHtml = `<section><h2 class="menu-section-title"><span>${categoryName}</span></h2><div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">`;
         items.forEach(item => {
             categoryHtml += `
                 <div>
