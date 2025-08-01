@@ -13,3 +13,22 @@ body.elegant-template {
 .elegant-template .font-serif-display {
     font-family: 'Playfair Display', serif;
 }
+
+.elegant-background {
+    position: relative;
+    z-index: 1;
+}
+
+.elegant-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/elegant-background.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1; /* Adjust opacity as needed */
+    z-index: -1;
+}

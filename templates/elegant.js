@@ -46,9 +46,10 @@ function renderElegantTemplate(data) {
             <link rel="stylesheet" href="templates/elegant.css">
         </head>
         <body class="elegant-template">
-            <div class="max-w-4xl mx-auto p-8">
-                <div class="w-full mb-8">
-                    <img src="assets/elegant_background.jpg" alt="背景图片" class="w-full h-auto object-cover rounded-lg shadow-md">
+            <div class="elegant-background">
+                <div class="max-w-4xl mx-auto p-8">
+                    <div class="w-full mb-8">
+                    <img src="assets/elegant-poster.jpg" alt="头部图片" class="w-full h-auto object-cover rounded-lg shadow-md">
                 </div>
                 <header class="text-center mb-10">
                     <h1 class="font-serif-display text-5xl md:text-6xl tracking-widest text-gray-900">${shopName.toUpperCase()}</h1>
@@ -59,7 +60,8 @@ function renderElegantTemplate(data) {
                 <main class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
                     ${leftColumnHtml}
                     ${rightColumnHtml}
-                </main>
+                    </main>
+                </div>
             </div>
         </body>
         </html>

@@ -129,6 +129,11 @@ async function renderMenuAsImage(data, template, width) {
     menuImage.src = imageUrl;
     menuImage.style.width = `${width}px`;
     menuImage.style.maxWidth = '100%';
+    menuImage.style.cursor = 'pointer';
+
+    menuImage.addEventListener('click', () => {
+        window.open(imageUrl, '_blank');
+    });
     
     // Clear placeholder and show image
     menuContainer.innerHTML = '';
