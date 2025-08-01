@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap');
+
+/* 
+  Note: This template relies on Tailwind CSS, which is loaded via a CDN in the corresponding .js file.
+  These are additional custom styles.
+*/
+
+body.elegant-template {
+    font-family: 'Lato', sans-serif;
+    background-color: #ffffff; /* Explicit background for canvas capture */
+}
+
+.elegant-template .font-serif-display {
+    font-family: 'Playfair Display', serif;
+}

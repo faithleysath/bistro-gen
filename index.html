@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我要做 Bistro 主理人</title>
     <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="templates/elegant.css">
+    <link rel="stylesheet" href="templates/minimalist.css">
     <script src="vendor/html2canvas.min.js"></script>
+    <script src="templates/elegant.js"></script>
+    <script src="templates/minimalist.js"></script>
 </head>
 <body>
 
@@ -25,22 +29,40 @@
             <div class="textarea-decorator">✨</div>
         </div>
 
+        <div class="controls-area">
+            <div class="template-selector">
+                <label>模板:</label>
+                <div class="radio-group">
+                    <input type="radio" id="template-elegant" name="menu-template" value="elegant" checked>
+                    <label for="template-elegant">典雅</label>
+                    <input type="radio" id="template-minimalist" name="menu-template" value="minimalist">
+                    <label for="template-minimalist">极简</label>
+                </div>
+            </div>
+            <div class="size-controls">
+                <div class="slider-group">
+                    <label for="width-slider">宽度: <span id="width-value">800</span>px</label>
+                    <input type="range" id="width-slider" min="400" max="1200" value="800">
+                </div>
+                <div class="slider-group">
+                    <label>高度: 自动</label>
+                </div>
+            </div>
+        </div>
+
         <button id="generate-btn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.09 8.26L20 10.35L14.09 12.44L12 18.7L9.91 12.44L4 10.35L9.91 8.26L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
             <span>生成我的 Bistro</span>
         </button>
 
         <p class="hint">💡 提示：描述越详细，生成的 Bistro 越个性化</p>
-
-        <div id="menu-container" style="display: none;">
-            <div id="menu-display">
-                <!-- Menu content will be generated here -->
-            </div>
-            <button id="save-btn">💾 保存为图片</button>
-        </div>
-        
     </div>
 
+    <div id="menu-container" style="display: none;">
+        <!-- Image will be inserted here directly by script -->
+        <p class="save-hint" style="display: none;">长按或右键点击图片即可保存</p>
+    </div>
+    
     <footer>
         <p>🍿 由 Cline Agent 开发 | 专业的伪精致餐厅生成器</p>
         <p>"让平凡的生活在反讽中闪闪发光"</p>
@@ -50,8 +72,12 @@
         const generateBtn = document.getElementById('generate-btn');
         const identityInput = document.getElementById('identity-input');
         const menuContainer = document.getElementById('menu-container');
-        const menuDisplay = document.getElementById('menu-display');
-        const saveBtn = document.getElementById('save-btn');
+        const saveHint = document.querySelector('.save-hint');
+        
+        const widthSlider = document.getElementById('width-slider');
+        const widthValue = document.getElementById('width-value');
+
+        widthSlider.addEventListener('input', (e) => widthValue.textContent = e.target.value);
 
         generateBtn.addEventListener('click', async () => {
             const identity = identityInput.value.trim();
@@ -60,9 +86,16 @@
                 return;
             }
 
+            const selectedTemplate = document.querySelector('input[name="menu-template"]:checked').value;
+            const imageWidth = parseInt(widthSlider.value, 10);
+
             const btnSpan = generateBtn.querySelector('span');
             btnSpan.textContent = '生成中...';
             generateBtn.disabled = true;
+            menuContainer.style.display = 'block';
+            menuContainer.innerHTML = '<p>正在为您精心绘制菜单...</p>'; // Show loading message
+            saveHint.style.display = 'none';
+
 
             try {
                 const response = await fetch('/api/generate', {
@@ -76,69 +109,122 @@
                 }
 
                 const data = await response.json();
-                renderMenu(data);
-                menuContainer.style.display = 'block';
+                await renderMenuAsImage(data, selectedTemplate, imageWidth);
+                
 
             } catch (error) {
                 console.error('生成失败:', error);
-                menuDisplay.innerHTML = `<div class="error"><p>糟糕，灵感枯竭了... 请稍后再试。</p><p class="error-details">${error.message}</p></div>`;
+                menuContainer.innerHTML = `<div class="error"><p>糟糕，灵感枯竭了... 请稍后再试。</p><p class="error-details">${error.message}</p></div>`;
             } finally {
                 btnSpan.textContent = '生成我的 Bistro';
                 generateBtn.disabled = false;
             }
         });
 
-        function renderMenu(data) {
-            let menuHtml = `
-                <div class="menu-header">
-                    <h2 class="menu-title">${data['店铺名称']}</h2>
-                    <p class="menu-slogan-cn">${data['Slogan（中）']}</p>
-                    <p class="menu-slogan-en">${data['Slogan (EN)']}</p>
-                </div>
-                <div class="menu-body">
-            `;
+        async function renderMenuAsImage(data, template, width) {
+            const renderFunction = template === 'elegant' ? renderElegantTemplate : renderMinimalistTemplate;
+            const menuHtml = renderFunction(data);
 
-            for (const category in data['菜单']) {
-                if (Object.hasOwnProperty.call(data['菜单'], category)) {
-                    menuHtml += `<h3 class="menu-category-title">${category}</h3>`;
-                    const items = data['菜单'][category];
-                    items.forEach(item => {
-                        menuHtml += `
-                            <div class="menu-item">
-                                <h4 class="dish-name-cn">${item['菜品（中）']}</h4>
-                                <p class="dish-name-en">${item['Dish (EN/FR)']}</p>
-                                <p class="dish-desc">${item['身份梗·哲学说明']}</p>
-                            </div>
-                        `;
-                    });
-                }
-            }
+            const captureContainer = document.createElement('div');
+            captureContainer.style.position = 'absolute';
+            captureContainer.style.left = '-9999px';
+            captureContainer.style.top = '0';
+            captureContainer.style.width = `${width}px`;
+            // Let height be auto
             
-            menuHtml += '</div>';
-            menuDisplay.innerHTML = menuHtml;
-        }
+            document.body.appendChild(captureContainer);
+            
+            const iframe = document.createElement('iframe');
+            iframe.style.width = `${width}px`;
+            iframe.style.height = 'auto';
+            iframe.style.border = 'none';
+            captureContainer.appendChild(iframe);
 
-        saveBtn.addEventListener('click', () => {
-            // Add class to set fixed width for capture
-            menuDisplay.classList.add('menu-for-capture');
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(menuHtml);
+            doc.close();
 
-            html2canvas(menuDisplay, {
-                useCORS: true,
-                backgroundColor: '#F8FBF8', // Match the menu background
-                scale: 2
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'my-bistro-menu.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                console.error('保存图片失败:', err);
-                alert('无法保存图片，请检查浏览器控制台获取更多信息。');
-            }).finally(() => {
-                // Always remove the class after capture, even if it fails
-                menuDisplay.classList.remove('menu-for-capture');
+            await new Promise(resolve => {
+                iframe.onload = () => setTimeout(resolve, 500);
             });
-        });
+            
+            const canvas = await html2canvas(doc.body, {
+                useCORS: true,
+                scale: 1,
+                width: width,
+                windowWidth: width,
+                backgroundColor: '#ffffff',
+            });
+
+            const imageUrl = canvas.toDataURL('image/png');
+            const menuImage = new Image();
+            menuImage.id = 'menu-image';
+            menuImage.src = imageUrl;
+            
+            // Clear placeholder and show image
+            menuContainer.innerHTML = '';
+            menuContainer.appendChild(menuImage);
+            menuContainer.appendChild(saveHint);
+            saveHint.style.display = 'block';
+
+            document.body.removeChild(captureContainer);
+        }
     </script>
+    <style>
+        .controls-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .template-selector, .size-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .radio-group {
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .radio-group label {
+            cursor: pointer;
+        }
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .slider-group input[type="range"] {
+            width: 120px;
+        }
+        #menu-container {
+            width: 100%;
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: auto;
+            background-color: transparent;
+        }
+        #menu-image {
+            display: block;
+            max-width: none;
+            border-radius: var(--border-radius-lg);
+            margin: 0 auto;
+        }
+        .save-hint {
+            margin-top: 16px;
+            font-size: 0.9em;
+            color: var(--secondary-text);
+        }
+    </style>
 </body>
 </html>
