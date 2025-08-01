@@ -900,6 +900,7 @@ footer p {
 
 .progress-bar {
     width: 100%;
+    max-width: min(680px, 100vw);
     height: 8px;
     background-color: #e0e0e0;
     border-radius: 4px;
