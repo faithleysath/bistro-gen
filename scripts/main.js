@@ -1,5 +1,45 @@
 let generatedData = null; // Store the generated data globally
 let aiTemplates = {}; // Store AI generated templates
+let templatePreviews = {}; // Store template preview images
+
+// Sample menu data for generating template previews
+const sampleMenuData = {
+    "店铺名称": "示例 Bistro",
+    "Slogan（中）": "在这里，每一次debug都是灵魂的重启",
+    "Slogan (EN)": "Where every debug is a soul reboot, savoring the intoxication beyond code.",
+    "菜单": {
+        "Appetizers": [
+            {
+                "菜品（中）": "代码诗人的灵感沙拉",
+                "Dish (EN/FR)": "Poet's Inspiration Salade",
+                "价格": "¥28",
+                "身份梗·哲学说明": "每一片生菜都承载着程序员对完美逻辑的追求"
+            }
+        ],
+        "Main Courses": [
+            {
+                "菜品（中）": "重构人生的意式烩饭",
+                "Dish (EN/FR)": "Life Refactoring Risotto",
+                "价格": "¥48",
+                "身份梗·哲学说明": "如同重构代码般，每一粒米都经过精心优化"
+            },
+            {
+                "菜品（中）": "异步处理的慢炖牛肉",
+                "Dish (EN/FR)": "Async Braised Beef",
+                "价格": "¥52",
+                "身份梗·哲学说明": "在时间的异步流转中，等待最完美的那一刻"
+            }
+        ],
+        "Desserts": [
+            {
+                "菜品（中）": "递归梦境提拉米苏",
+                "Dish (EN/FR)": "Recursive Dream Tiramisu",
+                "价格": "¥22",
+                "身份梗·哲学说明": "层层叠叠的甜蜜，如同递归函数的无限深度"
+            }
+        ]
+    }
+};
 
 const generateBtn = document.getElementById('generate-btn');
 const identityInput = document.getElementById('identity-input');
@@ -168,6 +208,97 @@ function initializeAITemplates() {
 // Save AI Templates to localStorage
 function saveAITemplates() {
     localStorage.setItem('bistro-ai-templates', JSON.stringify(aiTemplates));
+}
+
+// Generate template preview image
+async function generateTemplatePreview(templateId) {
+    if (templatePreviews[templateId]) {
+        return templatePreviews[templateId];
+    }
+
+    let renderFunction;
+    
+    if (templateId === 'elegant') {
+        renderFunction = renderElegantTemplate;
+    } else if (templateId === 'minimalist') {
+        renderFunction = renderMinimalistTemplate;
+    } else if (templateId.startsWith('ai-template-') && aiTemplates[templateId]) {
+        // Load AI template dynamically
+        try {
+            const blob = new Blob([aiTemplates[templateId].jsCode], { type: 'application/javascript' });
+            const scriptUrl = URL.createObjectURL(blob);
+            
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            
+            await new Promise((resolve, reject) => {
+                script.onload = () => {
+                    URL.revokeObjectURL(scriptUrl);
+                    document.head.removeChild(script);
+                    resolve();
+                };
+                script.onerror = (error) => {
+                    URL.revokeObjectURL(scriptUrl);
+                    document.head.removeChild(script);
+                    reject(new Error('JS代码加载失败'));
+                };
+                document.head.appendChild(script);
+            });
+            
+            renderFunction = window[aiTemplates[templateId].functionName];
+            if (!renderFunction) {
+                throw new Error('AI模版函数未找到');
+            }
+        } catch (error) {
+            console.error('AI模版预览生成失败:', error);
+            renderFunction = renderElegantTemplate;
+        }
+    } else {
+        renderFunction = renderElegantTemplate;
+    }
+    
+    const menuHtml = renderFunction(sampleMenuData);
+    const width = 800;
+    
+    const captureContainer = document.createElement('div');
+    captureContainer.style.position = 'absolute';
+    captureContainer.style.left = '-9999px';
+    captureContainer.style.top = '0';
+    captureContainer.style.width = `${width}px`;
+    
+    document.body.appendChild(captureContainer);
+    
+    const iframe = document.createElement('iframe');
+    iframe.style.width = `${width}px`;
+    iframe.style.height = 'auto';
+    iframe.style.border = 'none';
+    captureContainer.appendChild(iframe);
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(menuHtml);
+    doc.close();
+
+    await new Promise(resolve => {
+        iframe.onload = () => setTimeout(resolve, 500);
+    });
+    
+    const canvas = await html2canvas(doc.body, {
+        useCORS: true,
+        scale: 2,
+        width: width,
+        windowWidth: width,
+        backgroundColor: '#ffffff',
+    });
+
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    const imageUrl = URL.createObjectURL(blob);
+    
+    document.body.removeChild(captureContainer);
+    
+    // Cache the preview
+    templatePreviews[templateId] = imageUrl;
+    return imageUrl;
 }
 
 // Update template selector with AI templates
@@ -390,7 +521,7 @@ function resetAITemplateModal() {
 }
 
 // Template Manager Functions
-function updateTemplateList() {
+async function updateTemplateList() {
     const templateList = document.getElementById('template-list');
     
     if (Object.keys(aiTemplates).length === 0) {
@@ -407,11 +538,26 @@ function updateTemplateList() {
     }
     
     templateList.innerHTML = '';
-    Object.keys(aiTemplates).forEach(templateId => {
+    
+    for (const templateId of Object.keys(aiTemplates)) {
         const template = aiTemplates[templateId];
         const templateItem = document.createElement('div');
         templateItem.className = 'template-item';
+        
+        // Create thumbnail placeholder
+        const thumbnailPlaceholder = `
+            <div class="template-thumbnail-container">
+                <div class="template-thumbnail-loading">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>生成预览中...</span>
+                </div>
+            </div>
+        `;
+        
         templateItem.innerHTML = `
+            ${thumbnailPlaceholder}
             <div class="template-info">
                 <h3>${template.name}</h3>
                 <p>创建时间: ${new Date(template.createdAt).toLocaleString()}</p>
@@ -423,7 +569,27 @@ function updateTemplateList() {
             </div>
         `;
         templateList.appendChild(templateItem);
-    });
+        
+        // Generate thumbnail asynchronously
+        try {
+            const previewUrl = await generateTemplatePreview(templateId);
+            const thumbnailContainer = templateItem.querySelector('.template-thumbnail-container');
+            thumbnailContainer.innerHTML = `
+                <img src="${previewUrl}" class="template-thumbnail" onclick="showTemplatePreview('${templateId}', '${previewUrl}')" alt="${template.name} 预览">
+            `;
+        } catch (error) {
+            console.error(`Failed to generate preview for ${templateId}:`, error);
+            const thumbnailContainer = templateItem.querySelector('.template-thumbnail-container');
+            thumbnailContainer.innerHTML = `
+                <div class="template-thumbnail-error">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>预览失败</span>
+                </div>
+            `;
+        }
+    }
 }
 
 // Template management functions
@@ -667,6 +833,43 @@ async function renderMenuAsImageWithAI(data, template, width) {
 
     document.body.removeChild(captureContainer);
 }
+
+// Show template preview in modal
+window.showTemplatePreview = function(templateId, previewUrl) {
+    const template = aiTemplates[templateId];
+    
+    // Create preview modal
+    const previewModal = document.createElement('div');
+    previewModal.className = 'template-preview-modal';
+    previewModal.innerHTML = `
+        <div class="template-preview-content">
+            <div class="template-preview-header">
+                <h3>${template.name} - 预览</h3>
+                <button class="modal-close" onclick="closeTemplatePreview()">&times;</button>
+            </div>
+            <div class="template-preview-body">
+                <img src="${previewUrl}" alt="${template.name} 预览" class="template-preview-image">
+            </div>
+        </div>
+    `;
+    
+    // Add click outside to close
+    previewModal.addEventListener('click', (e) => {
+        if (e.target === previewModal) {
+            closeTemplatePreview();
+        }
+    });
+    
+    document.body.appendChild(previewModal);
+    previewModal.style.display = 'flex';
+};
+
+window.closeTemplatePreview = function() {
+    const previewModal = document.querySelector('.template-preview-modal');
+    if (previewModal) {
+        document.body.removeChild(previewModal);
+    }
+};
 
 // Replace the original renderMenuAsImage function
 renderMenuAsImage = renderMenuAsImageWithAI;
