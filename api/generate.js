@@ -440,9 +440,28 @@ async function callGoogleAIStreaming(identity, apiKey, sendUpdate) {
     });
 
     const data = await response.json();
-    // The response is nested, we need to extract the actual text content which is a JSON string.
-    const jsonText = data.candidates[0].content.parts[0].text;
-    const menuData = JSON.parse(jsonText);
+    
+    // With JSON Schema, Gemini returns structured data directly
+    // Check if the response contains structured data or text that needs parsing
+    const responseContent = data.candidates[0].content.parts[0];
+    
+    let menuData;
+    if (responseContent.text) {
+        // If it's text, try to parse as JSON
+        try {
+            menuData = JSON.parse(responseContent.text);
+        } catch (parseError) {
+            console.error('Failed to parse JSON text:', parseError);
+            console.error('Raw text:', responseContent.text);
+            throw new Error('Invalid JSON response from AI');
+        }
+    } else if (responseContent.structuredData) {
+        // If it's structured data, use it directly
+        menuData = responseContent.structuredData;
+    } else {
+        // Fallback: assume the entire response content is the data
+        menuData = responseContent;
+    }
 
     await sendUpdate({
         type: 'progress',
