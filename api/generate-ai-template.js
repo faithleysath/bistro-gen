@@ -3,7 +3,7 @@ export const config = {
 };
 
 async function callGoogleAI(input, type, apiKey) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     let prompt = '';
     let requestBody = {};
