@@ -33,21 +33,21 @@ async function callGoogleAI(identity, apiKey) {
     "Slogan（中）": "<Slogan（中）>",
     "Slogan (EN)": "<Slogan (EN)>",
     "菜单": {
-        "前菜 (Appetizers)": [
+        "Appetizers": [
             {
                 "菜品（中）": "<菜品（中）>",
                 "Dish (EN/FR)": "<Dish (EN/FR)>",
                 "身份梗·哲学说明": "<身份梗·哲学说明>"
             }
         ],
-        "主菜 (Main Courses)": [
+        "Main Courses": [
             {
                 "菜品（中）": "<菜品（中）>",
                 "Dish (EN/FR)": "<Dish (EN/FR)>",
                 "身份梗·哲学说明": "<身份梗·哲学说明>"
             }
         ],
-        "甜点 (Desserts)": [
+        "Desserts": [
             {
                 "菜品（中）": "<菜品（中）>",
                 "Dish (EN/FR)": "<Dish (EN/FR)>",

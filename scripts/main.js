@@ -1,3 +1,5 @@
+let generatedData = null; // Store the generated data globally
+
 const generateBtn = document.getElementById('generate-btn');
 const identityInput = document.getElementById('identity-input');
 const menuContainer = document.getElementById('menu-container');
@@ -20,7 +22,18 @@ templateSelectorGroup.addEventListener('click', (e) => {
         // Add active class to the clicked button
         e.target.classList.add('active');
         // Update selected template
-        selectedTemplate = e.target.dataset.template;
+        const newTemplate = e.target.dataset.template;
+
+        // If the template is actually changed and data exists, re-render
+        if (newTemplate !== selectedTemplate && generatedData) {
+            selectedTemplate = newTemplate;
+            const imageWidth = parseInt(widthSlider.value, 10);
+            menuContainer.innerHTML = '<p>正在切换模板...</p>';
+            saveHint.style.display = 'none';
+            renderMenuAsImage(generatedData, selectedTemplate, imageWidth);
+        } else {
+            selectedTemplate = newTemplate;
+        }
     }
 });
 
@@ -53,6 +66,7 @@ generateBtn.addEventListener('click', async () => {
         }
 
         const data = await response.json();
+        generatedData = data; // Save data globally
         await renderMenuAsImage(data, selectedTemplate, imageWidth);
         
 
@@ -101,11 +115,20 @@ async function renderMenuAsImage(data, template, width) {
         backgroundColor: '#ffffff',
     });
 
-    const imageUrl = canvas.toDataURL('image/png');
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+
+    // Revoke previous blob URL if it exists to free memory
+    const existingImage = document.getElementById('menu-image');
+    if (existingImage && existingImage.src.startsWith('blob:')) {
+        URL.revokeObjectURL(existingImage.src);
+    }
+
+    const imageUrl = URL.createObjectURL(blob);
     const menuImage = new Image();
     menuImage.id = 'menu-image';
     menuImage.src = imageUrl;
     menuImage.style.width = `${width}px`;
+    menuImage.style.maxWidth = '100%';
     
     // Clear placeholder and show image
     menuContainer.innerHTML = '';

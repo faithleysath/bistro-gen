@@ -133,8 +133,8 @@ header .quote {
 }
 
 #menu-container {
-    margin-top: 40px;
-    width: 100%;
+    margin-top: 10px;
+    width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;

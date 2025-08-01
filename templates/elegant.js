@@ -12,7 +12,7 @@ function renderElegantTemplate(data) {
 
     const generateCategoryHtml = (categoryName) => {
         const items = data['菜单'][categoryName];
-        let categoryHtml = `<h2 class="font-serif-display text-4xl mb-6 border-b-2 border-gray-200 pb-2">${categoryName}</h2><div class="space-y-6">`;
+        let categoryHtml = `<h2 class="font-serif-display text-4xl mt-6 mb-6 border-b-2 border-gray-200 pb-2">${categoryName}</h2><div class="space-y-6">`;
         items.forEach(item => {
             categoryHtml += `
                 <div>
