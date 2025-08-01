@@ -127,7 +127,16 @@ generateBtn.addEventListener('click', async () => {
 });
 
 async function renderMenuAsImage(data, template, width) {
-    const renderFunction = template === 'elegant' ? renderElegantTemplate : renderMinimalistTemplate;
+    let renderFunction;
+    if (template === 'elegant') {
+        renderFunction = renderElegantTemplate;
+    } else if (template === 'minimalist') {
+        renderFunction = renderMinimalistTemplate;
+    } else if (template === 'yunguichuan') {
+        renderFunction = renderYunguichuanTemplate;
+    } else {
+        renderFunction = renderElegantTemplate; // fallback
+    }
     const menuHtml = renderFunction(data);
 
     const captureContainer = document.createElement('div');
@@ -222,6 +231,8 @@ async function generateTemplatePreview(templateId) {
         renderFunction = renderElegantTemplate;
     } else if (templateId === 'minimalist') {
         renderFunction = renderMinimalistTemplate;
+    } else if (templateId === 'yunguichuan') {
+        renderFunction = renderYunguichuanTemplate;
     } else if (templateId.startsWith('ai-template-') && aiTemplates[templateId]) {
         // Load AI template dynamically
         try {
@@ -702,6 +713,8 @@ async function renderMenuAsImageWithAI(data, template, width) {
         renderFunction = renderElegantTemplate;
     } else if (template === 'minimalist') {
         renderFunction = renderMinimalistTemplate;
+    } else if (template === 'yunguichuan') {
+        renderFunction = renderYunguichuanTemplate;
     } else if (template.startsWith('ai-template-') && aiTemplates[template]) {
         // Load AI template dynamically - with debug output
         try {
