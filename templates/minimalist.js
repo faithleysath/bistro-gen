@@ -32,7 +32,79 @@ function renderMinimalistTemplate(data) {
             <meta charset="UTF-8">
             <title>Minimalist Menu</title>
             <script src="https://cdn.tailwindcss.com"></script>
-            <link rel="stylesheet" href="templates/minimalist.css">
+            <style>
+                @import url('https://fonts.loli.net/css2?family=Tinos:ital,wght@0,400;0,700;1,400&display=swap');
+
+                body.minimalist-template {
+                    font-family: 'Tinos', serif;
+                    color: #333;
+                    background-color: #ffffff;
+                }
+
+                .minimalist-template .menu-section-title {
+                    font-size: 2.5rem;
+                    font-weight: 400;
+                    letter-spacing: 0.5rem;
+                    text-transform: uppercase;
+                    text-align: center;
+                    margin-top: 3rem;
+                    margin-bottom: 3rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1.5rem;
+                }
+
+                .minimalist-template .menu-section-title::before,
+                .minimalist-template .menu-section-title::after {
+                    content: '';
+                    flex-grow: 1;
+                    height: 1px;
+                    background-color: #ccc;
+                }
+
+                .minimalist-template .item-name {
+                    font-weight: 700;
+                    text-transform: uppercase;
+                }
+
+                .minimalist-template .item-description {
+                    font-style: italic;
+                    color: #666;
+                }
+
+                .minimalist-template .header-icons {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 1.5rem;
+                    margin: 1.5rem 0;
+                }
+
+                .minimalist-template .header-icons svg {
+                    width: 2rem;
+                    height: 2rem;
+                    stroke: #333;
+                    stroke-width: 1.5;
+                    fill: none;
+                }
+
+                .minimalist-template .main-title {
+                    text-align: center;
+                    font-weight: 400;
+                    font-size: 1.5rem;
+                    letter-spacing: 0.2rem;
+                    text-transform: uppercase;
+                }
+
+                .minimalist-template .footer-text {
+                    font-size: 0.8rem;
+                    text-align: center;
+                    margin-top: 3rem;
+                    padding: 1rem;
+                    color: #666;
+                    font-style: italic;
+                }
+            </style>
         </head>
         <body class="minimalist-template bg-white max-w-4xl mx-auto p-8">
             <header>

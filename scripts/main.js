@@ -354,6 +354,7 @@ document.getElementById('generate-ai-template').addEventListener('click', async 
         aiTemplates[result.templateId] = {
             name: result.templateName,
             jsCode: result.jsCode,
+            functionName: result.functionName,
             createdAt: result.createdAt
         };
         
@@ -523,17 +524,69 @@ async function renderMenuAsImageWithAI(data, template, width) {
     } else if (template === 'minimalist') {
         renderFunction = renderMinimalistTemplate;
     } else if (template.startsWith('ai-template-') && aiTemplates[template]) {
-        // Load AI template dynamically
+        // Load AI template dynamically - with debug output
         try {
-            eval(aiTemplates[template].jsCode);
-            const functionName = `renderAITemplate_${template.split('-')[2]}`;
-            renderFunction = window[functionName];
+            console.log('🔍 调试信息 - AI模版加载开始');
+            console.log('模版ID:', template);
+            console.log('模版数据:', aiTemplates[template]);
+            console.log('期望的函数名:', aiTemplates[template].functionName);
+            console.log('JS代码长度:', aiTemplates[template].jsCode?.length);
+            
+            // 检查执行前的函数
+            const beforeFunctions = Object.keys(window).filter(key => 
+                key.startsWith('renderAITemplate_') && typeof window[key] === 'function'
+            );
+            console.log('执行前的AI函数:', beforeFunctions);
+            
+            // 使用更安全的script标签加载方式
+            const blob = new Blob([aiTemplates[template].jsCode], { type: 'application/javascript' });
+            const scriptUrl = URL.createObjectURL(blob);
+            
+            console.log('🔧 创建script标签加载JS代码...');
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            
+            // 等待脚本加载完成
+            await new Promise((resolve, reject) => {
+                script.onload = () => {
+                    console.log('✅ JS代码加载成功');
+                    URL.revokeObjectURL(scriptUrl); // 清理blob URL
+                    document.head.removeChild(script); // 移除script标签
+                    resolve();
+                };
+                script.onerror = (error) => {
+                    console.error('❌ JS代码加载失败:', error);
+                    URL.revokeObjectURL(scriptUrl);
+                    document.head.removeChild(script);
+                    reject(new Error('JS代码加载失败'));
+                };
+                document.head.appendChild(script);
+            });
+            
+            // 检查执行后的函数
+            const afterFunctions = Object.keys(window).filter(key => 
+                key.startsWith('renderAITemplate_') && typeof window[key] === 'function'
+            );
+            console.log('执行后的AI函数:', afterFunctions);
+            
+            renderFunction = window[aiTemplates[template].functionName];
+            console.log('找到的函数:', renderFunction);
+            console.log('函数类型:', typeof renderFunction);
+            
             if (!renderFunction) {
+                console.error('❌ 函数未找到，可能的原因:');
+                console.error('1. functionName字段缺失:', !aiTemplates[template].functionName);
+                console.error('2. JS代码加载失败');
+                console.error('3. 函数名不匹配');
                 throw new Error('AI模版函数未找到');
             }
+            
+            console.log('✅ AI模版加载成功');
         } catch (error) {
-            console.error('AI模版加载失败:', error);
-            alert('AI模版加载失败，切换到默认模版');
+            console.error('❌ AI模版加载失败:', error);
+            console.error('错误详情:', error.message);
+            console.error('错误堆栈:', error.stack);
+            alert(`AI模版加载失败: ${error.message}`);
             renderFunction = renderElegantTemplate;
         }
     } else {

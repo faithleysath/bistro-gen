@@ -43,7 +43,37 @@ function renderElegantTemplate(data) {
             <meta charset="UTF-8">
             <title>Elegant Menu</title>
             <script src="https://cdn.tailwindcss.com"></script>
-            <link rel="stylesheet" href="templates/elegant.css">
+            <style>
+                @import url('https://fonts.loli.net/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap');
+
+                body.elegant-template {
+                    font-family: 'Lato', sans-serif;
+                    background-color: #ffffff;
+                }
+
+                .elegant-template .font-serif-display {
+                    font-family: 'Playfair Display', serif;
+                }
+
+                .elegant-background {
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .elegant-background::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-image: url('/assets/elegant-background.png');
+                    background-size: cover;
+                    background-position: center;
+                    opacity: 0.1;
+                    z-index: -1;
+                }
+            </style>
         </head>
         <body class="elegant-template">
             <div class="elegant-background">
