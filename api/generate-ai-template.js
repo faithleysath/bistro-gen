@@ -434,7 +434,14 @@ export default async function handler(req) {
 
     try {
         const { type, content, templateName } = await req.json();
-        const apiKey = "AIzaSyA6DTysB4oaayFjG-8hEPohuDzsJ2OL590";
+        const apiKey = process.env.GOOGLE_AI_API_KEY;
+
+        if (!apiKey) {
+            return new Response(JSON.stringify({ error: 'Google AI API key is not configured.' }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
 
         if (!type || !content) {
             return new Response(JSON.stringify({ error: 'Type and content are required.' }), {
