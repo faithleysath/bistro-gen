@@ -3,312 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bistro 梗生成器</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLCRYGxJ4PRH9kozuJjpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
-
-        :root {
-            --bg-color: #F5F5DC; /* 米色 */
-            --text-color: #3D2B1F; /* 深棕色 */
-            --accent-color: #8B4513; /* 鞍褐色 */
-            --border-color: #D2B48C; /* 鞣皮色 */
-            --font-serif-cn: 'Noto Serif SC', serif;
-            --font-serif-en: 'Playfair Display', serif;
-        }
-
-        body {
-            font-family: var(--font-serif-cn);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        h1 {
-            font-family: var(--font-serif-cn);
-            font-weight: 700;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        #identity-input {
-            flex-grow: 1;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 16px;
-        }
-
-        #generate-btn {
-            padding: 12px 20px;
-            border: none;
-            background-color: var(--accent-color);
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        #generate-btn:hover {
-            background-color: #65340f;
-        }
-        
-        #generate-btn:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-
-        #loader {
-            display: none;
-            margin-top: 20px;
-            font-style: italic;
-        }
-
-        #menu-container {
-            margin-top: 30px;
-            border: 2px dashed var(--border-color);
-            padding: 20px;
-            background-color: #fffaf0; /* 花白色 */
-            display: none; /* Initially hidden */
-        }
-
-        #menu-content {
-            text-align: left;
-        }
-
-        #menu-content h2 {
-            font-family: var(--font-serif-en);
-            text-align: center;
-            font-weight: 700;
-            font-style: italic;
-            margin-bottom: 10px;
-        }
-
-        #menu-content .slogan {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        #menu-content .slogan-cn {
-            font-size: 1.1em;
-            font-weight: 700;
-        }
-
-        #menu-content .slogan-en {
-            font-family: var(--font-serif-en);
-            font-style: italic;
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        #menu-content .menu-title {
-            text-align: center;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 5px 0;
-        }
-
-        .menu-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px dotted var(--border-color);
-        }
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-
-        .menu-item .name-cn {
-            font-weight: 700;
-            font-size: 1.1em;
-        }
-
-        .menu-item .name-en {
-            font-family: var(--font-serif-en);
-            font-style: italic;
-            font-size: 1em;
-            color: #555;
-        }
-
-        .menu-item .description {
-            font-size: 0.9em;
-            margin-top: 8px;
-            line-height: 1.6;
-        }
-
-        #save-btn {
-            display: none; /* Initially hidden */
-            margin-top: 20px;
-            padding: 12px 25px;
-            border: none;
-            background-color: #28a745;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        #save-btn:hover {
-            background-color: #218838;
-        }
-        
-        footer {
-            margin-top: 30px;
-            font-size: 0.8em;
-            color: #888;
-        }
-    </style>
+    <title>我要做 Bistro 主理人</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <script src="vendor/html2canvas.min.js"></script>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Bistro 主理人梗生成器</h1>
-        <p>输入你的身份、职业或任何关键词，生成一份专属你的“伪精致”Bistro菜单。</p>
-        <div class="input-group">
-            <input type="text" id="identity-input" placeholder="例如：一个程序员, 摸鱼大师, 铲屎官...">
-            <button id="generate-btn">生成菜单</button>
-        </div>
-        <div id="loader">正在为您烹饪灵感，请稍候... 👨‍🍳</div>
+    <div class="top-bar">
+        <span>🍳 伪精致 Bistro 生成器</span>
     </div>
 
-    <div id="menu-container">
-        <div id="menu-content">
-            <!-- Generated menu will be injected here -->
+    <div class="main-container">
+        <header>
+            <h1>我要做 <strong>Bistro</strong> 主理人</h1>
+            <p class="subtitle">输入你的身份描述，生成专属的伪精致餐厅</p>
+            <p class="quote">“在平凡中寻找不平凡，在普通中创造奇迹”</p>
+        </header>
+
+        <div class="input-area">
+            <textarea id="identity-input" rows="5" placeholder="例如：我是一个热爱咖啡的程序员，周末喜欢看书写代码，梦想开一家小店..."></textarea>
+            <div class="textarea-decorator">✨</div>
         </div>
+
+        <button id="generate-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.09 8.26L20 10.35L14.09 12.44L12 18.7L9.91 12.44L4 10.35L9.91 8.26L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
+            <span>生成我的 Bistro</span>
+        </button>
+
+        <p class="hint">💡 提示：描述越详细，生成的 Bistro 越个性化</p>
+
+        <div id="menu-container" style="display: none;">
+            <div id="menu-display">
+                <!-- Menu content will be generated here -->
+            </div>
+            <button id="save-btn">💾 保存为图片</button>
+        </div>
+        
     </div>
-    
-    <button id="save-btn">保存菜单为图片</button>
-    
+
     <footer>
-        <p>灵感源自中文互联网对Bistro文化的精彩解构。</p>
+        <p>🍿 由 Cline Agent 开发 | 专业的伪精致餐厅生成器</p>
+        <p>"让平凡的生活在反讽中闪闪发光"</p>
     </footer>
 
     <script>
         const generateBtn = document.getElementById('generate-btn');
         const identityInput = document.getElementById('identity-input');
-        const loader = document.getElementById('loader');
         const menuContainer = document.getElementById('menu-container');
-        const menuContent = document.getElementById('menu-content');
+        const menuDisplay = document.getElementById('menu-display');
         const saveBtn = document.getElementById('save-btn');
 
         generateBtn.addEventListener('click', async () => {
             const identity = identityInput.value.trim();
             if (!identity) {
-                alert('请输入你的身份！');
+                alert('请输入你的身份描述！');
                 return;
             }
 
-            // UI updates for loading state
+            const btnSpan = generateBtn.querySelector('span');
+            btnSpan.textContent = '生成中...';
             generateBtn.disabled = true;
-            loader.style.display = 'block';
-            menuContainer.style.display = 'none';
-            saveBtn.style.display = 'none';
 
             try {
                 const response = await fetch('/api/generate', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ identity: identity }),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identity: identity })
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `服务器出错了: ${response.status}`);
+                    throw new Error(`服务器出错了: ${response.statusText}`);
                 }
 
                 const data = await response.json();
                 renderMenu(data);
+                menuContainer.style.display = 'block';
 
             } catch (error) {
-                console.error('Error generating menu:', error);
-                alert(`生成失败: ${error.message}`);
+                console.error('生成失败:', error);
+                menuDisplay.innerHTML = `<div class="error"><p>糟糕，灵感枯竭了... 请稍后再试。</p><p class="error-details">${error.message}</p></div>`;
             } finally {
-                // Restore UI
+                btnSpan.textContent = '生成我的 Bistro';
                 generateBtn.disabled = false;
-                loader.style.display = 'none';
             }
         });
 
         function renderMenu(data) {
-            if (!data || !data.shop_name || !data.menu) {
-                alert('返回的数据格式不正确，无法渲染菜单。');
-                return;
-            }
-            
-            let menuHTML = `
-                <h2>${data.shop_name}</h2>
-                <div class="slogan">
-                    <p class="slogan-cn">${data.slogan.cn}</p>
-                    <p class="slogan-en">${data.slogan.en}</p>
+            let menuHtml = `
+                <div class="menu-header">
+                    <h2 class="menu-title">${data['店铺名称']}</h2>
+                    <p class="menu-slogan-cn">${data['Slogan（中）']}</p>
+                    <p class="menu-slogan-en">${data['Slogan (EN)']}</p>
                 </div>
-                <div class="menu-title">MENU</div>
+                <div class="menu-body">
             `;
 
-            data.menu.forEach(item => {
-                menuHTML += `
-                    <div class="menu-item">
-                        <div class="name-cn">${item.name_cn}</div>
-                        <div class="name-en">${item.name_en}</div>
-                        <p class="description">${item.description}</p>
-                    </div>
-                `;
-            });
-
-            menuContent.innerHTML = menuHTML;
-            menuContainer.style.display = 'block';
-            saveBtn.style.display = 'block';
+            for (const category in data['菜单']) {
+                if (Object.hasOwnProperty.call(data['菜单'], category)) {
+                    menuHtml += `<h3 class="menu-category-title">${category}</h3>`;
+                    const items = data['菜单'][category];
+                    items.forEach(item => {
+                        menuHtml += `
+                            <div class="menu-item">
+                                <h4 class="dish-name-cn">${item['菜品（中）']}</h4>
+                                <p class="dish-name-en">${item['Dish (EN/FR)']}</p>
+                                <p class="dish-desc">${item['身份梗·哲学说明']}</p>
+                            </div>
+                        `;
+                    });
+                }
+            }
+            
+            menuHtml += '</div>';
+            menuDisplay.innerHTML = menuHtml;
         }
 
         saveBtn.addEventListener('click', () => {
-            if (!menuContainer.style.display || menuContainer.style.display === 'none') return;
+            // Add class to set fixed width for capture
+            menuDisplay.classList.add('menu-for-capture');
 
-            // Temporarily change background for capture to avoid transparency issues
-            menuContainer.style.backgroundColor = '#fffaf0';
-
-            html2canvas(menuContainer, {
+            html2canvas(menuDisplay, {
                 useCORS: true,
-                scale: 2, // Increase resolution for better quality
-                backgroundColor: '#fffaf0'
+                backgroundColor: '#F8FBF8', // Match the menu background
+                scale: 2
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'my-bistro-menu.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             }).catch(err => {
-                console.error('Oops, something went wrong!', err);
-                alert('保存图片失败，请检查控制台获取更多信息。');
+                console.error('保存图片失败:', err);
+                alert('无法保存图片，请检查浏览器控制台获取更多信息。');
+            }).finally(() => {
+                // Always remove the class after capture, even if it fails
+                menuDisplay.classList.remove('menu-for-capture');
             });
         });
     </script>

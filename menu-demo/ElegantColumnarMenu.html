@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>典雅分栏菜单 - Merport Bistro</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Google Fonts以获得更接近的字体风格 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 自定义字体 */
+        body {
+            font-family: 'Lato', sans-serif;
+        }
+        /* 标题使用更具设计感的衬线字体 */
+        .font-serif-display {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <div class="max-w-4xl mx-auto p-4 sm:p-8">
+        
+        <!-- 顶部图片 -->
+        <div class="w-full mb-8">
+            <img src="./elegant_background.jpg" 
+                 alt="背景图片" 
+                 class="w-full h-auto object-cover rounded-lg shadow-md">
+        </div>
+
+        <!-- 餐厅标题和营业时间 -->
+        <header class="text-center mb-10">
+            <h1 class="font-serif-display text-5xl md:text-6xl tracking-widest text-gray-900">MERPORT BISTRO</h1>
+            <div class="mt-4 text-sm font-semibold tracking-wider text-gray-600">
+                <span>BREAKFAST : 7:30 AM - 10:30 AM</span>
+                <span class="mx-2">||</span>
+                <span>LUNCH : 11:00 AM - 3:30 PM</span>
+            </div>
+        </header>
+
+        <!-- 菜单主体内容 -->
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+
+            <!-- 左侧栏：沙拉 -->
+            <section>
+                <h2 class="font-serif-display text-4xl mb-6 border-b-2 border-gray-200 pb-2">Salads</h2>
+                <div class="space-y-6">
+                    <!-- 菜单项 -->
+                    <div>
+                        <div class="flex justify-between items-baseline">
+                            <h3 class="text-lg font-bold uppercase tracking-wider">Greek Salad</h3>
+                            <p class="text-lg font-bold">$13</p>
+                        </div>
+                        <p class="text-gray-600 mt-1">Romaine, Spinach, Cucumber, Feta Cheese, Red Wine Vinaigrette, Kalamata Olives, Red Onions</p>
+                    </div>
+                    <!-- 菜单项 -->
+                    <div>
+                        <div class="flex justify-between items-baseline">
+                            <h3 class="text-lg font-bold uppercase tracking-wider">Caesar Salad</h3>
+                            <p class="text-lg font-bold">$12</p>
+                        </div>
+                        <p class="text-gray-600 mt-1">Romaine, Caesar Dressing, Parmesan, Croutons, Anchovies, Cherry Tomatoes</p>
+                    </div>
+                    <!-- 菜单项 -->
+                    <div>
+                        <div class="flex justify-between items-baseline">
+                            <h3 class="text-lg font-bold uppercase tracking-wider">Hot Goat Cheese Salad</h3>
+                            <p class="text-lg font-bold">$12</p>
+                        </div>
+                        <p class="text-gray-600 mt-1">Breaded Goat Cheese, Assorted Greens, Cranberries, House Dressing</p>
+                    </div>
+                     <!-- 菜单项 -->
+                    <div>
+                        <div class="flex justify-between items-baseline">
+                            <h3 class="text-lg font-bold uppercase tracking-wider">Kale Salad</h3>
+                            <p class="text-lg font-bold">$13</p>
+                        </div>
+                        <p class="text-gray-600 mt-1">Kale, Feta Cheese, Lemon Garlic Vinaigrette, Cherry Tomatoes, Toasted Almonds, Pickled Onions</p>
+                    </div>
+                     <!-- 菜单项 -->
+                    <div>
+                        <div class="flex justify-between items-baseline">
+                            <h3 class="text-lg font-bold uppercase tracking-wider">Seared Tuna Salad</h3>
+                            <p class="text-lg font-bold">$20</p>
+                        </div>
+                        <p class="text-gray-600 mt-1">Seared Tuna Filet, Baby Tomatoes, Kalamata Olives, Hard Boiled Eggs, House Dressing</p>
+                    </div>
+                     <!-- 菜单项 -->
+                    <div>
+                        <div class="flex justify-between items-baseline">
+                            <h3 class="text-lg font-bold uppercase tracking-wider">Apple Walnut</h3>
+                            <p class="text-lg font-bold">$13</p>
+                        </div>
+                        <p class="text-gray-600 mt-1">Romaine, Spinach, Kale, Apples, Candied Walnuts, Blue Cheese Crumbles, Cranberries, Pomegranate Vinaigrette</p>
+                    </div>
+                     <!-- 菜单项 -->
+                    <div>
+                        <div class="flex justify-between items-baseline">
+                            <h3 class="text-lg font-bold uppercase tracking-wider">Cobb Salad</h3>
+                            <p class="text-lg font-bold">$15</p>
+                        </div>
+                        <p class="text-gray-600 mt-1">Romaine, Kale, Spinach, Hard Boiled Eggs, Cherry Tomatoes, Blue Cheese Crumbles, Avocado, Cucumber, Avocado Ranch Dressing, Bacon Bits</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右侧栏：冷盘和加菜 -->
+            <section class="space-y-10">
+                <div>
+                    <h2 class="font-serif-display text-4xl mb-6 border-b-2 border-gray-200 pb-2">Cold Appetizers</h2>
+                    <div class="space-y-6">
+                        <!-- 菜单项 -->
+                        <div>
+                            <div class="flex justify-between items-baseline">
+                                <h3 class="text-lg font-bold uppercase tracking-wider">Avocado Toast (Seasonal)</h3>
+                                <p class="text-lg font-bold">$11</p>
+                            </div>
+                            <p class="text-gray-600 mt-1">Marinated Grape Tomatoes, Avocado, Feta, Basil on Whole Wheat Toast</p>
+                        </div>
+                        <!-- 菜单项 -->
+                        <div>
+                            <div class="flex justify-between items-baseline">
+                                <h3 class="text-lg font-bold uppercase tracking-wider">Smoked Salmon</h3>
+                                <p class="text-lg font-bold">$13.95</p>
+                            </div>
+                            <p class="text-gray-600 mt-1">Smoked Atlantic Salmon, Red Onions, Capers, Cream Cheese</p>
+                        </div>
+                        <!-- 菜单项 -->
+                        <div>
+                            <div class="flex justify-between items-baseline">
+                                <h3 class="text-lg font-bold uppercase tracking-wider">Hummus Platter</h3>
+                                <p class="text-lg font-bold">$11</p>
+                            </div>
+                            <p class="text-gray-600 mt-1">Garden Vegetables, House-made Hummus, Olive Oil, Kalamata Olives & Feta Cheese</p>
+                        </div>
+                        <!-- 菜单项 -->
+                        <div>
+                            <div class="flex justify-between items-baseline">
+                                <h3 class="text-lg font-bold uppercase tracking-wider">Bruschetta</h3>
+                                <p class="text-lg font-bold">$8.50</p>
+                            </div>
+                            <p class="text-gray-600 mt-1">Grilled French Bread, Roma Tomatoes, Fresh Basil, Feta & Olive Oil</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 加蛋白质选项 -->
+                <div>
+                    <h2 class="font-serif-display text-3xl mb-4">Add Protein To Your Salad</h2>
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-2 text-gray-700">
+                        <div class="flex justify-between"><span>Chicken</span> <span>$5</span></div>
+                        <div class="flex justify-between"><span>Conch</span> <span>$6</span></div>
+                        <div class="flex justify-between"><span>Shrimp</span> <span>$10</span></div>
+                        <div class="flex justify-between"><span>Salmon</span> <span>$9</span></div>
+                        <div class="flex justify-between"><span>Snapper</span> <span>$10</span></div>
+                        <div class="flex justify-between"><span>Tuna</span> <span>$10</span></div>
+                        <div class="flex justify-between col-span-2"><span>NY Strip</span> <span>$10</span></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>

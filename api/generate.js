@@ -1,147 +1,90 @@
-// Vercel Serverless Function
 export const config = {
     runtime: 'edge',
 };
 
-// The prompt template remains the same
-const getPrompt = (identity) => `
-# 角色
-你是「反讽系 Pretentious Bistro 文案机」。你掌握 2025 年中文互联网对“bistro主理人”的调侃精髓：把寻常食材吹成宇宙命题，用英文/法语/Emoji点缀“高端氛围”，每一道菜都自带过度包装的 back-story。
+// --- Mock LLM Function ---
+// In a real-world scenario, you would replace this with a call to an actual LLM API (e.g., OpenAI, Google AI).
+// This mock function simulates the API call and returns data in the expected format.
+async function mockLLM(identity) {
+    // A simple delay to simulate network latency
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-# 任务
-根据用户的身份描述，输出一份「xx Bistro」的完整宣传套件。
-
-# 输入
-身份描述: "${identity}"
-
-# 输出格式 (严格遵守以下的JSON结构，不要添加任何Markdown标记)
-{
-  "shop_name": "<身份关键词> Bistro",
-  "slogan": {
-    "cn": "一句话中文Slogan，夸张宣称理念与情绪疗愈",
-    "en": "An English slogan, exaggerating concepts and emotional healing"
-  },
-  "menu": [
-    {
-      "id": 1,
-      "name_cn": "菜品中文名",
-      "name_en": "Dish English/French Name",
-      "description": "不超过30字的哲学说明，暗扣用户身份梗"
-    },
-    {
-      "id": 2,
-      "name_cn": "菜品中文名",
-      "name_en": "Dish English/French Name",
-      "description": "不超过30字的哲学说明，暗扣用户身份梗"
-    },
-    {
-      "id": 3,
-      "name_cn": "菜品中文名",
-      "name_en": "Dish English/French Name",
-      "description": "不超过30字的哲学说明，暗扣用户身份梗"
-    },
-    {
-      "id": 4,
-      "name_cn": "菜品中文名",
-      "name_en": "Dish English/French Name",
-      "description": "不超过30字的哲学说明，暗扣用户身份梗"
-    },
-    {
-      "id": 5,
-      "name_cn": "饮品中文名",
-      "name_en": "Drink English/French Name",
-      "description": "不超过30字的哲学说明，暗扣用户身份梗"
+    // Pre-defined responses for specific keywords to make the mock more fun
+    if (identity.includes("程序员") || identity.includes("码农")) {
+        return {
+            "店铺名称": "二进制Bistro",
+            "Slogan（中）": "在代码的喧嚣中，寻味字节间的片刻宁静。",
+            "Slogan (EN)": "Where Bytes meet Bites.",
+            "菜单": {
+                "前菜 (Appetizers)": [
+                    { "菜品（中）": "空指针沙拉", "Dish (EN/FR)": "Null Pointer Salade", "身份梗·哲学说明": "一份虚无主义的终极体验。盘中空无一物，正如你试图访问的那个不存在的内存地址。" },
+                    { "菜品（中）": "调试风暴", "Dish (EN/FR)": "Le Débogage de Minuit", "身份梗·哲学说明": "精选红、黄、绿三色甜椒，象征着你与Bug的深夜搏斗。每一次咀嚼，都是一次断点的胜利。" }
+                ],
+                "主菜 (Main Courses)": [
+                    { "菜品（中）": "祖传秘制意大利面", "Dish (EN/FR)": "Spaghetti Legacy", "身份梗·哲学说明": "面条缠绕，酱汁粘稠，一如你接手的那个屎山代码。每一口，都是对前人的“致敬”。" },
+                    { "菜品（中）": "重构之梦", "Dish (EN/FR)": "Rêve de Refactoring", "身份梗·哲学说明": "将昨日的剩菜解构，以全新的分子料理形式呈现。入口即化，仿佛那段优雅重构后的代码。" }
+                ],
+                "甜点 (Desserts)": [
+                    { "菜品（中）": "并发焦糖布丁", "Dish (EN/FR)": "Crème Brûlée Concurrente", "身份梗·哲学说明": "上层是滚烫的焦糖，下层是冰凉的布丁。感受这冰火两重天，如同处理多线程时的竞态条件。" }
+                ]
+            }
+        };
     }
-  ]
+
+    // A generic, but still "pretentious", default response
+    return {
+        "店铺名称": `${identity.substring(0, 5)} Bistro`,
+        "Slogan（中）": "我们不提供食物，只提供一种可以咀嚼的叙事。",
+        "Slogan (EN)": "We don't serve food; we serve chewable narratives.",
+        "菜单": {
+            "前菜 (Appetizers)": [
+                { "菜品（中）": "解构主义土豆泥", "Dish (EN/FR)": "Purée Déconstruite", "身份梗·哲学说明": "土豆不再是土豆，而是对“块茎”这一概念的重新审视。每一口都是对存在主义的叩问。" },
+                { "菜品（中）": "情绪价值气泡水", "Dish (EN/FR)": "Eau Pétillante d'Émotion", "身份梗·哲学说明": "这杯水里没有矿物质，只有从阿尔卑斯山顶收集的，价值800块的情绪价值。" }
+            ],
+            "主菜 (Main Courses)": [
+                { "菜品（中）": "意识流挞", "Dish (EN/FR)": "Tarte du Flux de Conscience", "身份梗·哲学说明": "味道的随机组合，象征着你混乱的思绪。你永远不知道下一口是什么，正如你不知道人生的意义。" }
+            ],
+            "配菜 (Sides)": [
+                { "菜品（中）": "留白", "Dish (EN/FR)": "L'Espace Vide", "身份梗·哲学说明": "一只空盘。旨在提醒您，在过度消费的时代，真正的奢侈是“无”。盛惠，288。" }
+            ],
+            "甜点 (Desserts)": [
+                { "菜品（中）": "雾化鸡尾酒", "Dish (EN/FR)": "Le Cocktail Nébulisé", "身份梗·哲学说明": "将酒精化为可吸入的灵感。我们认为，饮酒不应是吞咽，而应是呼吸。" }
+            ]
+        }
+    };
 }
-`;
 
-// --- Main Handler ---
 
-export default async function handler(request) {
-    if (request.method !== 'POST') {
-        return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+export default async function handler(req) {
+    if (req.method !== 'POST') {
+        return new Response(JSON.stringify({ error: 'Method Not Allowed' }), {
             status: 405,
             headers: { 'Content-Type': 'application/json' },
         });
     }
 
     try {
-        // --- 1. Get Environment Variables ---
-        const apiBaseUrl = process.env.LLM_API_BASE_URL;
-        const apiKey = process.env.LLM_API_KEY;
-        const modelName = process.env.LLM_MODEL_NAME;
+        const { identity } = await req.json();
 
-        // --- 2. Validate Configuration ---
-        if (!apiBaseUrl || !apiKey || !modelName) {
-            const missing = [
-                !apiBaseUrl && "LLM_API_BASE_URL",
-                !apiKey && "LLM_API_KEY",
-                !modelName && "LLM_MODEL_NAME"
-            ].filter(Boolean).join(', ');
-
-            return new Response(JSON.stringify({ error: `Server configuration error. Missing environment variables: ${missing}` }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-
-        // --- 3. Get User Input ---
-        const { identity } = await request.json();
-        if (!identity) {
-            return new Response(JSON.stringify({ error: 'Identity is required' }), {
+        if (!identity || typeof identity !== 'string') {
+            return new Response(JSON.stringify({ error: 'Identity is required and must be a string.' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' },
             });
         }
-
-        // --- 4. Call LLM API ---
-        const prompt = getPrompt(identity);
-        const payload = {
-            model: modelName,
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.7,
-            response_format: { "type": "json_object" },
-        };
-
-        const llmResponse = await fetch(apiBaseUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`,
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (!llmResponse.ok) {
-            const errorBody = await llmResponse.text();
-            console.error(`LLM API error from ${apiBaseUrl}:`, errorBody);
-            return new Response(JSON.stringify({ error: `Failed to get a response from the chef.` }), {
-                status: llmResponse.status,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-
-        const data = await llmResponse.json();
-        const content = data.choices[0].message.content;
         
-        const jsonContent = JSON.parse(content);
-
-        // --- 5. Return Response ---
-        return new Response(JSON.stringify(jsonContent), {
+        // --- Here you would call the actual LLM API ---
+        // For now, we use our mock function
+        const menuData = await mockLLM(identity);
+        
+        return new Response(JSON.stringify(menuData), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
 
     } catch (error) {
         console.error('Error in generate function:', error);
-        if (error instanceof SyntaxError) {
-             return new Response(JSON.stringify({ error: 'The chef had a moment of confusion and returned an invalid menu format. Please try again.' }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-        return new Response(JSON.stringify({ error: 'An unexpected error occurred.' }), {
+        return new Response(JSON.stringify({ error: 'An internal server error occurred.' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });

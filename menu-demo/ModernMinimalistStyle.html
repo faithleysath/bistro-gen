@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>現代極簡菜單</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* 自定義樣式 */
+        body {
+            font-family: 'Tinos', serif;
+            color: #333;
+        }
+        .menu-section-title {
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 0.5rem;
+            text-transform: uppercase;
+            text-align: center;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .menu-section-title::before, .menu-section-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: #ccc;
+        }
+        .menu-section-title::before {
+            left: 0;
+        }
+        .menu-section-title::after {
+            right: 0;
+        }
+        .item-name {
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .item-description {
+            font-style: italic;
+            color: #666;
+        }
+        .header-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .header-icons svg {
+            width: 2rem;
+            height: 2rem;
+            stroke: #333;
+            stroke-width: 1.5;
+            fill: none;
+        }
+        .main-title {
+            text-align: center;
+            font-weight: 400;
+            font-size: 1.5rem;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+        }
+        .footer-text {
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-white max-w-4xl mx-auto p-4 sm:p-8">
+
+    <!-- 頁首 -->
+    <header>
+        <div class="header-icons">
+            <!-- House Icon (New Style) -->
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 10.5L12 3.5L19.5 10.5V20.5H4.5V10.5Z"></path>
+                <path d="M9.5 20.5V14.5H14.5V20.5"></path>
+            </svg>
+            <!-- Wine Glass Icon (New Style) -->
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 3L18 3L12 12L6 3Z"></path>
+                <path d="M12 12V21"></path>
+                <path d="M8 21H16"></path>
+            </svg>
+            <!-- Utensils Icon (Redrawn) -->
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <!-- This path draws the U-shape for the outer tines of the fork -->
+                <path d="M7 3v8c0 1.65 1.35 3 3 3s3-1.35 3-3V3"></path>
+                <!-- This path draws the middle tine and the handle -->
+                <path d="M10 3v18"></path>
+                <!-- This path draws the knife -->
+                <path d="M17 3v18"></path>
+            </svg>
+        </div>
+        <h1 class="main-title">house. wine. bistro.</h1>
+    </header>
+
+    <main>
+        <!-- 開胃菜 -->
+        <section>
+            <h2 class="menu-section-title">starters</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                <div>
+                    <div class="flex justify-between item-name"><span>porchetta spianata</span><span>19</span></div>
+                    <p class="item-description">crescenza stracchino, basil pesto, arugula</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>burrata</span><span>16</span></div>
+                    <p class="item-description">heirloom tomatoes, fresh milk mozzarella, marinara, habanero honey</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>mussels and frites</span><span>18</span></div>
+                    <p class="item-description">prince edward island mussels, saffron tomato broth, frites</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>panela</span><span>14</span></div>
+                    <p class="item-description">grilled panela, roasted red bell pepper, basil pesto, focaccia</p>
+                </div>
+                 <div>
+                    <div class="flex justify-between item-name"><span>calamari</span><span>16</span></div>
+                    <p class="item-description">calabrian peppers, spicy marinara</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>brie</span><span>14</span></div>
+                    <p class="item-description">puff pastry, caramel, almonds, walnuts, berries, golden raisins</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>mushrooms</span><span>14</span></div>
+                    <p class="item-description">italian fennel sausage, marinara, parmesan</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>salmon cakes</span><span>18</span></div>
+                    <p class="item-description">mustard aioli, pickled mustard seeds, fennel, frisee</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>garlic lime shrimp</span><span>19</span></div>
+                    <p class="item-description">texas gulf shrimp, garlic lime beurre blanc, focaccia</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>charcuterie board</span><span>20</span></div>
+                    <p class="item-description">seasonal chef selections</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 沙拉和湯 -->
+        <section>
+            <h2 class="menu-section-title">salad & soup</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                 <div>
+                    <div class="flex justify-between item-name"><span>chef's selection soup</span><span>7</span></div>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>house</span><span>7 / 12</span></div>
+                    <p class="item-description">field greens, mushrooms, kalamata olives, red onion, grape tomatoes, housemade garlic croutons, sweet onion vinaigrette, almonds, bleu cheese</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>yahweh</span><span>7 / 12</span></div>
+                    <p class="item-description">field greens, strawberry vinaigrette, sun-dried cranberries, caprino cheese, strawberries</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>fork and knife caesar</span><span>7 / 12</span></div>
+                    <p class="item-description">romaine hearts, caesar dressing, garlic croutons, parmesan, anchovy filet, lemon wedge</p>
+                </div>
+                <div class="md:col-span-2">
+                    <div class="flex justify-between item-name"><span>add protein:</span><span></span></div>
+                    <p class="item-description">chicken 8 | texas gulf shrimp 9 | salmon 12</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 義大利麵和燉飯 -->
+        <section>
+            <h2 class="menu-section-title">pasta & risotto</h2>
+            <p class="text-center -mt-8 mb-8 text-sm italic text-gray-600">housemade semolina pasta | creamy arborio rice</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                <div>
+                    <div class="flex justify-between item-name"><span>salsiccia</span><span>20</span></div>
+                    <p class="item-description">campanelle, fennel sausage, roasted red bell pepper, marinara, chevre</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>butternut squash risotto</span><span>19</span></div>
+                    <p class="item-description">almonds, garlic, basil, chicken</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>pesce</span><span>26</span></div>
+                    <p class="item-description">campanelle, citrus risotto, caper lime beurre blanc</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>duck</span><span>29</span></div>
+                    <p class="item-description">ziti, smoked gouda, aged cheddar, wild mushrooms, duck confit, fried duck egg</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>carbonara</span><span>22</span></div>
+                    <p class="item-description">bucatini, pecorino romano, capers, guanciale</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>bistecca</span><span>28</span></div>
+                    <p class="item-description">campanelle, asiago, grilled picanha, wild mushrooms, gruyere</p>
+                </div>
+                 <div>
+                    <div class="flex justify-between item-name"><span>cacio e pepe</span><span>24</span></div>
+                    <p class="item-description">bucatini, pecorino romano, lemon, thyme, peppercorn blend, texas gulf shrimp</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>puttanesca risotto</span><span>26</span></div>
+                    <p class="item-description">marinara, caramelized red onions, kalamata olives, capers, salmon</p>
+                </div>
+                <div></div>
+                 <div>
+                    <div class="flex justify-between item-name"><span>tortellini</span><span>19</span></div>
+                    <p class="item-description">butternut squash, caprino cheese, sage compound butter, almonds</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 牛排和排餐 -->
+        <section>
+            <h2 class="menu-section-title">steaks & chops</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                <div>
+                    <div class="flex justify-between item-name"><span>lamb chops</span><span>36</span></div>
+                    <p class="item-description">frenched lollipops, bleu cheese cream, rustic arugula salad</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>mcallen burger</span><span>17</span></div>
+                    <p class="item-description">8oz akaushi beef, wild mushrooms, caramelized onion, pepper jack, ciabatta, frites</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>sirloin marsala</span><span>38</span></div>
+                    <p class="item-description">9 oz sirloin, roasted vegetables, wild mushroom marsala</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>double cut pork chop</span><span>32</span></div>
+                    <p class="item-description">compart duroc, heirloom carrots, crispy golden potatoes, golden raisins, toasted pistachio, herb butter</p>
+                </div>
+                <div>
+                    <div class="flex justify-between item-name"><span>ribeye</span><span>45</span></div>
+                    <p class="item-description">14 oz ribeye, spirelli vegetables, sugo rosa</p>
+                </div>
+                 <div>
+                    <div class="flex justify-between item-name"><span>pork burger</span><span>16</span></div>
+                    <p class="item-description">compart duroc pork, smoked bacon, caramelized onion, brie, green apple, arugula, jalapeno bun, frites</p>
+                </div>
+                 <div>
+                    <div class="flex justify-between item-name"><span>veal chop</span><span>56</span></div>
+                    <p class="item-description">16oz bone in cowboy cut veal chop, beet bucatini, sun-dried tomatoes, spinach</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer>
+        <p class="footer-text">
+            Our menu features New American fare with an emphasis on housemade pastas and Italian flavor. We utilize organic, sustainable, all natural and local ingredients when available. We believe in building relationships with our local farmers to bring their food to our unique concept. Along with an extensive craft beer selection. We invite you to make yourself comfortable, drink what you like, explore new flavors, and create new memories around a meal shared with friends and family.
+            <br><br>
+            Cook Often. Eat Well. Chef's kiss & xoxo, Delgadito
+            <br><br>
+            *Consuming raw or undercooked meats, poultry, seafood, shellfish, or eggs may increase your risk of foodborne illness. Please alert your server if you have any food allergies or dietary restrictions.
+        </p>
+        <p class="text-right text-xs text-gray-500">05/2023</p>
+    </footer>
+
+</body>
+</html>
