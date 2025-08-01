@@ -310,11 +310,8 @@ async function callGoogleAIStreaming(identity, apiKey, sendUpdate) {
                                             description: "菜品的哲学说明或身份梗描述"
                                         }
                                     },
-                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"],
-                                    additionalProperties: false
-                                },
-                                minItems: 2,
-                                maxItems: 3
+                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"]
+                                }
                             },
                             "Main Courses": {
                                 type: "array",
@@ -338,11 +335,8 @@ async function callGoogleAIStreaming(identity, apiKey, sendUpdate) {
                                             description: "菜品的哲学说明或身份梗描述"
                                         }
                                     },
-                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"],
-                                    additionalProperties: false
-                                },
-                                minItems: 3,
-                                maxItems: 4
+                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"]
+                                }
                             },
                             "Side Dishes": {
                                 type: "array",
@@ -366,11 +360,8 @@ async function callGoogleAIStreaming(identity, apiKey, sendUpdate) {
                                             description: "菜品的哲学说明或身份梗描述"
                                         }
                                     },
-                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"],
-                                    additionalProperties: false
-                                },
-                                minItems: 2,
-                                maxItems: 3
+                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"]
+                                }
                             },
                             "Desserts": {
                                 type: "array",
@@ -394,19 +385,14 @@ async function callGoogleAIStreaming(identity, apiKey, sendUpdate) {
                                             description: "菜品的哲学说明或身份梗描述"
                                         }
                                     },
-                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"],
-                                    additionalProperties: false
-                                },
-                                minItems: 3,
-                                maxItems: 4
+                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"]
+                                }
                             }
                         },
-                        required: ["Appetizers", "Main Courses", "Side Dishes", "Desserts"],
-                        additionalProperties: false
+                        required: ["Appetizers", "Main Courses", "Side Dishes", "Desserts"]
                     }
                 },
-                required: ["店铺名称", "Slogan（中）", "Slogan (EN)", "菜单"],
-                additionalProperties: false
+                required: ["店铺名称", "Slogan（中）", "Slogan (EN)", "菜单"]
             }
         }
     };
