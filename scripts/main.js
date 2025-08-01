@@ -462,7 +462,11 @@ window.exportAITemplate = function(templateId) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${template.name}.bistro-template`;
+    // 确保文件名安全且包含正确的后缀名
+    const safeName = template.name.replace(/[^a-zA-Z0-9\u4e00-\u9fa5_-]/g, '_');
+    a.download = `${safeName}.json`;
+    // 设置 download 属性确保浏览器识别为下载
+    a.setAttribute('download', `${safeName}.json`);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -493,6 +497,14 @@ document.getElementById('import-template-btn').addEventListener('click', () => {
 document.getElementById('import-file-input').addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
         const file = e.target.files[0];
+        
+        // 检查文件扩展名
+        if (!file.name.endsWith('.json')) {
+            alert('请选择 .json 格式的模版文件！');
+            e.target.value = ''; // 清空文件选择
+            return;
+        }
+        
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
@@ -508,7 +520,8 @@ document.getElementById('import-file-input').addEventListener('change', (e) => {
                     alert('无效的模版文件格式！');
                 }
             } catch (error) {
-                alert('模版文件解析失败！');
+                console.error('Import error:', error);
+                alert('模版文件解析失败！请确保文件格式正确。');
             }
         };
         reader.readAsText(file);
