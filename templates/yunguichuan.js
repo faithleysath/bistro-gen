@@ -53,8 +53,8 @@ function renderYunguichuanTemplate(data) {
 
                 body.yunguichuan-template {
                     font-family: 'Noto Serif SC', serif;
-                    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 50%, #a5d6a7 100%);
-                    color: #1b5e20;
+                    background: linear-gradient(135deg, #1a2e1a 0%, #0d1f0d 50%, #0a1a0a 100%);
+                    color: #c8d6c8;
                     min-height: 100vh;
                     position: relative;
                 }
@@ -67,11 +67,33 @@ function renderYunguichuanTemplate(data) {
                     right: 0;
                     bottom: 0;
                     background-image: 
-                        radial-gradient(circle at 20% 20%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(46, 125, 50, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 60%, rgba(129, 199, 132, 0.1) 0%, transparent 50%);
+                        radial-gradient(circle at 20% 20%, rgba(34, 60, 34, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(20, 40, 20, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 60%, rgba(45, 70, 45, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 60% 20%, rgba(25, 35, 25, 0.3) 0%, transparent 40%),
+                        linear-gradient(45deg, transparent 30%, rgba(15, 25, 15, 0.1) 50%, transparent 70%),
+                        repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(30, 50, 30, 0.05) 101px, rgba(30, 50, 30, 0.05) 102px);
                     pointer-events: none;
                     z-index: -1;
+                }
+
+                .yunguichuan-template::after {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: 
+                        radial-gradient(2px 2px at 20px 30px, rgba(127, 176, 105, 0.1), transparent),
+                        radial-gradient(2px 2px at 40px 70px, rgba(127, 176, 105, 0.08), transparent),
+                        radial-gradient(1px 1px at 90px 40px, rgba(212, 175, 55, 0.1), transparent),
+                        radial-gradient(1px 1px at 130px 80px, rgba(212, 175, 55, 0.08), transparent);
+                    background-repeat: repeat;
+                    background-size: 150px 100px;
+                    pointer-events: none;
+                    z-index: -1;
+                    opacity: 0.3;
                 }
 
                 .main-container {
@@ -97,18 +119,20 @@ function renderYunguichuanTemplate(data) {
                 .cloud-pattern {
                     width: 60px;
                     height: 30px;
-                    background: linear-gradient(45deg, #4caf50, #66bb6a);
+                    background: linear-gradient(45deg, #2d5a2d, #3d6b3d);
                     border-radius: 50px;
                     position: relative;
                     margin: 0 1rem;
+                    box-shadow: 0 0 15px rgba(45, 90, 45, 0.4);
                 }
 
                 .cloud-pattern::before,
                 .cloud-pattern::after {
                     content: '';
                     position: absolute;
-                    background: linear-gradient(45deg, #4caf50, #66bb6a);
+                    background: linear-gradient(45deg, #2d5a2d, #3d6b3d);
                     border-radius: 50%;
+                    box-shadow: 0 0 10px rgba(45, 90, 45, 0.3);
                 }
 
                 .cloud-pattern::before {
@@ -129,36 +153,38 @@ function renderYunguichuanTemplate(data) {
                     font-family: 'Ma Shan Zheng', cursive;
                     font-size: 3.5rem;
                     font-weight: 900;
-                    color: #2d7d32;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+                    color: #7fb069;
+                    text-shadow: 2px 2px 8px rgba(0,0,0,0.6), 0 0 20px rgba(127, 176, 105, 0.3);
                     margin: 1rem 0;
                     letter-spacing: 0.2rem;
                 }
 
                 .slogan {
                     font-size: 1.1rem;
-                    color: #388e3c;
+                    color: #a8c090;
                     font-weight: 500;
                     letter-spacing: 0.3rem;
                     position: relative;
+                    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
                 }
 
                 .slogan::before,
                 .slogan::after {
                     content: '◆';
-                    color: #ffd700;
+                    color: #d4af37;
                     margin: 0 1rem;
                     font-size: 0.8rem;
+                    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
                 }
 
                 .menu-category {
                     margin-bottom: 3rem;
-                    background: rgba(255, 255, 255, 0.7);
+                    background: rgba(20, 35, 20, 0.8);
                     border-radius: 20px;
                     padding: 2rem;
-                    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(127, 176, 105, 0.1);
                     backdrop-filter: blur(10px);
-                    border: 2px solid rgba(76, 175, 80, 0.2);
+                    border: 2px solid rgba(45, 90, 45, 0.4);
                 }
 
                 .category-header {
@@ -172,18 +198,19 @@ function renderYunguichuanTemplate(data) {
                 .category-title {
                     font-family: 'Ma Shan Zheng', cursive;
                     font-size: 2.2rem;
-                    color: #2d7d32;
+                    color: #7fb069;
                     margin: 0 2rem;
-                    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+                    text-shadow: 2px 2px 6px rgba(0,0,0,0.6), 0 0 15px rgba(127, 176, 105, 0.2);
                     position: relative;
                 }
 
                 .bamboo-decoration {
                     width: 80px;
                     height: 4px;
-                    background: linear-gradient(90deg, #4caf50, #66bb6a, #4caf50);
+                    background: linear-gradient(90deg, #2d5a2d, #4a7c4a, #2d5a2d);
                     border-radius: 2px;
                     position: relative;
+                    box-shadow: 0 0 10px rgba(45, 90, 45, 0.4);
                 }
 
                 .bamboo-decoration::before {
@@ -194,9 +221,9 @@ function renderYunguichuanTemplate(data) {
                     transform: translateX(-50%);
                     width: 12px;
                     height: 12px;
-                    background: #ffd700;
+                    background: #d4af37;
                     border-radius: 50%;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 15px rgba(212, 175, 55, 0.3);
                 }
 
                 .category-items {
@@ -218,9 +245,10 @@ function renderYunguichuanTemplate(data) {
                 .item-name {
                     font-size: 1.3rem;
                     font-weight: 700;
-                    color: #1b5e20;
+                    color: #c8d6c8;
                     flex-grow: 1;
                     position: relative;
+                    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
                 }
 
                 .price-container {
@@ -231,36 +259,39 @@ function renderYunguichuanTemplate(data) {
                 .price {
                     font-size: 1.2rem;
                     font-weight: 600;
-                    color: #2d7d32;
-                    background: linear-gradient(45deg, #ffd700, #ffeb3b);
+                    color: #1a2e1a;
+                    background: linear-gradient(45deg, #d4af37, #b8941f);
                     padding: 0.3rem 0.8rem;
                     border-radius: 20px;
-                    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-                    border: 2px solid #ffc107;
+                    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4), 0 0 15px rgba(212, 175, 55, 0.2);
+                    border: 2px solid #b8941f;
                 }
 
                 .item-description {
-                    color: #388e3c;
+                    color: #a8c090;
                     font-size: 0.95rem;
                     line-height: 1.6;
                     font-style: italic;
                     margin-left: 1rem;
                     position: relative;
+                    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
                 }
 
                 .item-description::before {
                     content: '"';
-                    color: #4caf50;
+                    color: #7fb069;
                     font-size: 1.5rem;
                     position: absolute;
                     left: -1rem;
                     top: -0.2rem;
+                    text-shadow: 0 0 8px rgba(127, 176, 105, 0.3);
                 }
 
                 .item-divider {
                     height: 1px;
-                    background: linear-gradient(90deg, transparent, #81c784, transparent);
+                    background: linear-gradient(90deg, transparent, rgba(127, 176, 105, 0.4), transparent);
                     margin-top: 1rem;
+                    box-shadow: 0 0 5px rgba(127, 176, 105, 0.2);
                 }
 
                 .footer-decoration {
@@ -273,8 +304,9 @@ function renderYunguichuanTemplate(data) {
                     display: inline-flex;
                     align-items: center;
                     gap: 1rem;
-                    color: #4caf50;
+                    color: #7fb069;
                     font-size: 1.5rem;
+                    text-shadow: 1px 1px 3px rgba(0,0,0,0.5), 0 0 10px rgba(127, 176, 105, 0.2);
                 }
 
                 @media (max-width: 768px) {
