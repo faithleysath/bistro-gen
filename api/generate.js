@@ -2,8 +2,8 @@ export const config = {
     runtime: 'edge',
 };
 
-// --- Real LLM Function ---
-async function callGoogleAI(identity, apiKey) {
+// --- Streaming LLM Function ---
+async function callGoogleAIStreaming(identity, apiKey, sendUpdate) {
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     const prompt = `
@@ -256,6 +256,14 @@ async function callGoogleAI(identity, apiKey) {
 - 禁用 "XX-XX-XX" 码状标记
 `;
 
+    // Send initial progress update
+    await sendUpdate({
+        type: 'progress',
+        stage: 'analyzing_identity',
+        message: '正在分析身份特征...',
+        progress: 10
+    });
+
     const body = {
         contents: [{
             parts: [{ text: prompt }]
@@ -264,6 +272,13 @@ async function callGoogleAI(identity, apiKey) {
             response_mime_type: "application/json",
         }
     };
+
+    await sendUpdate({
+        type: 'progress',
+        stage: 'calling_ai',
+        message: '正在调用AI生成菜单...',
+        progress: 30
+    });
 
     const response = await fetch(API_URL, {
         method: 'POST',
@@ -279,10 +294,26 @@ async function callGoogleAI(identity, apiKey) {
         throw new Error(`API request failed with status ${response.status}`);
     }
 
+    await sendUpdate({
+        type: 'progress',
+        stage: 'processing_response',
+        message: '正在处理AI响应...',
+        progress: 70
+    });
+
     const data = await response.json();
     // The response is nested, we need to extract the actual text content which is a JSON string.
     const jsonText = data.candidates[0].content.parts[0].text;
-    return JSON.parse(jsonText);
+    const menuData = JSON.parse(jsonText);
+
+    await sendUpdate({
+        type: 'progress',
+        stage: 'finalizing',
+        message: '正在完成菜单生成...',
+        progress: 90
+    });
+
+    return menuData;
 }
 
 
@@ -311,17 +342,67 @@ export default async function handler(req) {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
-        
-        const menuData = await callGoogleAI(identity, apiKey);
-        
-        return new Response(JSON.stringify(menuData), {
+
+        // Create a streaming response
+        const stream = new ReadableStream({
+            async start(controller) {
+                const encoder = new TextEncoder();
+                
+                // Helper function to send updates
+                const sendUpdate = async (data) => {
+                    const message = `data: ${JSON.stringify(data)}\n\n`;
+                    controller.enqueue(encoder.encode(message));
+                };
+
+                try {
+                    // Send initial connection confirmation
+                    await sendUpdate({
+                        type: 'connected',
+                        message: '连接已建立，开始生成菜单...',
+                        progress: 0
+                    });
+
+                    // Call the streaming AI function
+                    const menuData = await callGoogleAIStreaming(identity, apiKey, sendUpdate);
+                    
+                    // Send final result
+                    await sendUpdate({
+                        type: 'complete',
+                        data: menuData,
+                        message: '菜单生成完成！',
+                        progress: 100
+                    });
+
+                } catch (error) {
+                    console.error('Error in streaming generate function:', error);
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    
+                    await sendUpdate({
+                        type: 'error',
+                        error: 'An internal server error occurred.',
+                        details: errorMessage,
+                        message: '生成过程中出现错误'
+                    });
+                } finally {
+                    controller.close();
+                }
+            }
+        });
+
+        return new Response(stream, {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
         });
 
     } catch (error) {
         console.error('Error in generate function:', error);
-        // Check if the error is a string and include it, otherwise provide a generic message.
         const errorMessage = error instanceof Error ? error.message : String(error);
         return new Response(JSON.stringify({ error: 'An internal server error occurred.', details: errorMessage }), {
             status: 500,

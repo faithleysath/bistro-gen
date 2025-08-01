@@ -232,7 +232,7 @@ const TEMPLATE_EXAMPLES = {
 }`
 };
 
-async function callGoogleAI(input, type, apiKey) {
+async function callGoogleAIStreaming(input, type, apiKey, sendUpdate) {
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     // 使用硬编码的模版示例
@@ -406,6 +406,21 @@ data = {
         };
     }
 
+    // Send progress updates
+    await sendUpdate({
+        type: 'progress',
+        stage: 'analyzing_input',
+        message: type === 'image' ? '正在分析图片内容...' : '正在分析文字描述...',
+        progress: 20
+    });
+
+    await sendUpdate({
+        type: 'progress',
+        stage: 'calling_ai',
+        message: '正在调用AI生成模板代码...',
+        progress: 40
+    });
+
     const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
@@ -419,6 +434,13 @@ data = {
         console.error("API Error Response:", errorBody);
         throw new Error(`API request failed with status ${response.status}`);
     }
+
+    await sendUpdate({
+        type: 'progress',
+        stage: 'processing_code',
+        message: '正在处理生成的代码...',
+        progress: 80
+    });
 
     const data = await response.json();
     return { jsCode: data.candidates[0].content.parts[0].text, functionName };
@@ -456,29 +478,80 @@ export default async function handler(req) {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
-        
-        const result = await callGoogleAI(content, type, apiKey);
-        let jsCode = result.jsCode;
-        const functionName = result.functionName;
-        
-        // 清理可能的markdown标记
-        jsCode = jsCode.replace(/^```javascript\s*\n?/i, '').replace(/\n?```\s*$/i, '');
-        jsCode = jsCode.replace(/^```js\s*\n?/i, '').replace(/\n?```\s*$/i, '');
-        jsCode = jsCode.replace(/^```\s*\n?/i, '').replace(/\n?```\s*$/i, '');
-        
-        // 生成唯一的模版ID
-        const timestamp = Date.now();
-        const templateId = `ai-template-${timestamp}`;
-        
-        return new Response(JSON.stringify({
-            templateId,
-            templateName: templateName || 'AI生成模版',
-            jsCode: jsCode.trim(),
-            functionName: functionName,
-            createdAt: new Date().toISOString()
-        }), {
+
+        // Create a streaming response
+        const stream = new ReadableStream({
+            async start(controller) {
+                const encoder = new TextEncoder();
+                
+                // Helper function to send updates
+                const sendUpdate = async (data) => {
+                    const message = `data: ${JSON.stringify(data)}\n\n`;
+                    controller.enqueue(encoder.encode(message));
+                };
+
+                try {
+                    // Send initial connection confirmation
+                    await sendUpdate({
+                        type: 'connected',
+                        message: '连接已建立，开始生成AI模板...',
+                        progress: 0
+                    });
+
+                    // Call the streaming AI function
+                    const result = await callGoogleAIStreaming(content, type, apiKey, sendUpdate);
+                    let jsCode = result.jsCode;
+                    const functionName = result.functionName;
+                    
+                    // Clean up potential markdown markers
+                    jsCode = jsCode.replace(/^```javascript\s*\n?/i, '').replace(/\n?```\s*$/i, '');
+                    jsCode = jsCode.replace(/^```js\s*\n?/i, '').replace(/\n?```\s*$/i, '');
+                    jsCode = jsCode.replace(/^```\s*\n?/i, '').replace(/\n?```\s*$/i, '');
+                    
+                    // Generate unique template ID
+                    const timestamp = Date.now();
+                    const templateId = `ai-template-${timestamp}`;
+                    
+                    // Send final result
+                    await sendUpdate({
+                        type: 'complete',
+                        data: {
+                            templateId,
+                            templateName: templateName || 'AI生成模版',
+                            jsCode: jsCode.trim(),
+                            functionName: functionName,
+                            createdAt: new Date().toISOString()
+                        },
+                        message: 'AI模板生成完成！',
+                        progress: 100
+                    });
+
+                } catch (error) {
+                    console.error('Error in streaming generate-ai-template function:', error);
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    
+                    await sendUpdate({
+                        type: 'error',
+                        error: 'An internal server error occurred.',
+                        details: errorMessage,
+                        message: '模板生成过程中出现错误'
+                    });
+                } finally {
+                    controller.close();
+                }
+            }
+        });
+
+        return new Response(stream, {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
         });
 
     } catch (error) {

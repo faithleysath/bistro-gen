@@ -100,8 +100,8 @@ generateBtn.addEventListener('click', async () => {
     menuContainer.innerHTML = '<p>正在为您精心绘制菜单...</p>'; // Show loading message
     saveHint.style.display = 'none';
 
-
     try {
+        // Use fetch with streaming response
         const response = await fetch('/api/generate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -112,10 +112,68 @@ generateBtn.addEventListener('click', async () => {
             throw new Error(`服务器出错了: ${response.statusText}`);
         }
 
-        const data = await response.json();
-        generatedData = data; // Save data globally
-        await renderMenuAsImage(data, selectedTemplate, imageWidth);
-        
+        // Check if response is streaming (text/event-stream)
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('text/event-stream')) {
+            // Handle streaming response
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            try {
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // Keep incomplete line in buffer
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+                                
+                                switch (data.type) {
+                                    case 'connected':
+                                        menuContainer.innerHTML = `<p>${data.message}</p>`;
+                                        break;
+                                        
+                                    case 'progress':
+                                        menuContainer.innerHTML = `
+                                            <div class="progress-container">
+                                                <p>${data.message}</p>
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: ${data.progress}%"></div>
+                                                </div>
+                                                <p class="progress-text">${data.progress}%</p>
+                                            </div>
+                                        `;
+                                        break;
+                                        
+                                    case 'complete':
+                                        generatedData = data.data; // Save data globally
+                                        await renderMenuAsImage(data.data, selectedTemplate, imageWidth);
+                                        return; // Exit the function
+                                        
+                                    case 'error':
+                                        throw new Error(data.details || data.error);
+                                }
+                            } catch (parseError) {
+                                console.error('解析流式数据失败:', parseError);
+                            }
+                        }
+                    }
+                }
+            } finally {
+                reader.releaseLock();
+            }
+        } else {
+            // Handle regular JSON response (fallback)
+            const data = await response.json();
+            generatedData = data;
+            await renderMenuAsImage(data, selectedTemplate, imageWidth);
+        }
 
     } catch (error) {
         console.error('生成失败:', error);
@@ -475,6 +533,21 @@ document.getElementById('generate-ai-template').addEventListener('click', async 
     generateBtn.textContent = '生成中...';
     generateBtn.disabled = true;
     
+    // Create progress indicator in modal
+    const modalContent = document.querySelector('#ai-template-modal .modal-content');
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'ai-template-progress';
+    progressContainer.innerHTML = `
+        <div class="progress-container">
+            <p>正在生成AI模板...</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <p class="progress-text">0%</p>
+        </div>
+    `;
+    modalContent.appendChild(progressContainer);
+    
     try {
         const response = await fetch('/api/generate-ai-template', {
             method: 'POST',
@@ -490,22 +563,89 @@ document.getElementById('generate-ai-template').addEventListener('click', async 
             throw new Error(`服务器出错了: ${response.statusText}`);
         }
         
-        const result = await response.json();
-        
-        // Store the AI template
-        aiTemplates[result.templateId] = {
-            name: result.templateName,
-            jsCode: result.jsCode,
-            functionName: result.functionName,
-            createdAt: result.createdAt
-        };
-        
-        saveAITemplates();
-        updateTemplateSelector();
-        
-        // Close modal and show success message
-        aiTemplateModal.style.display = 'none';
-        alert(`模版 "${result.templateName}" 创建成功！`);
+        // Check if response is streaming
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('text/event-stream')) {
+            // Handle streaming response
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            try {
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // Keep incomplete line in buffer
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+                                
+                                switch (data.type) {
+                                    case 'connected':
+                                        progressContainer.querySelector('p').textContent = data.message;
+                                        break;
+                                        
+                                    case 'progress':
+                                        progressContainer.querySelector('p').textContent = data.message;
+                                        progressContainer.querySelector('.progress-fill').style.width = `${data.progress}%`;
+                                        progressContainer.querySelector('.progress-text').textContent = `${data.progress}%`;
+                                        break;
+                                        
+                                    case 'complete':
+                                        const result = data.data;
+                                        
+                                        // Store the AI template
+                                        aiTemplates[result.templateId] = {
+                                            name: result.templateName,
+                                            jsCode: result.jsCode,
+                                            functionName: result.functionName,
+                                            createdAt: result.createdAt
+                                        };
+                                        
+                                        saveAITemplates();
+                                        updateTemplateSelector();
+                                        
+                                        // Close modal and show success message
+                                        aiTemplateModal.style.display = 'none';
+                                        alert(`模版 "${result.templateName}" 创建成功！`);
+                                        return;
+                                        
+                                    case 'error':
+                                        throw new Error(data.details || data.error);
+                                }
+                            } catch (parseError) {
+                                console.error('解析流式数据失败:', parseError);
+                            }
+                        }
+                    }
+                }
+            } finally {
+                reader.releaseLock();
+            }
+        } else {
+            // Handle regular JSON response (fallback)
+            const result = await response.json();
+            
+            // Store the AI template
+            aiTemplates[result.templateId] = {
+                name: result.templateName,
+                jsCode: result.jsCode,
+                functionName: result.functionName,
+                createdAt: result.createdAt
+            };
+            
+            saveAITemplates();
+            updateTemplateSelector();
+            
+            // Close modal and show success message
+            aiTemplateModal.style.display = 'none';
+            alert(`模版 "${result.templateName}" 创建成功！`);
+        }
         
     } catch (error) {
         console.error('AI模版生成失败:', error);
@@ -513,6 +653,10 @@ document.getElementById('generate-ai-template').addEventListener('click', async 
     } finally {
         generateBtn.textContent = originalText;
         generateBtn.disabled = false;
+        // Remove progress container
+        if (progressContainer && progressContainer.parentNode) {
+            progressContainer.parentNode.removeChild(progressContainer);
+        }
     }
 });
 

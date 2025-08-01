@@ -885,3 +885,72 @@ footer p {
     border-radius: var(--border-radius-md);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
+
+/* Progress Bar Styles */
+.progress-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.progress-container p {
+    margin: 0 0 16px 0;
+    color: var(--primary-text);
+    font-size: 1em;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--brand-color), #1A73E8);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    animation: progress-shimmer 2s infinite;
+}
+
+.progress-text {
+    margin: 0;
+    font-size: 0.9em;
+    color: var(--secondary-text);
+    font-weight: 500;
+}
+
+@keyframes progress-shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.progress-fill {
+    background: linear-gradient(
+        90deg,
+        var(--brand-color) 0%,
+        #1A73E8 50%,
+        var(--brand-color) 100%
+    );
+    background-size: 200px 100%;
+    animation: progress-shimmer 2s infinite;
+}
+
+/* AI Template Progress Styles */
+.ai-template-progress {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.ai-template-progress .progress-container {
+    padding: 0;
+}
