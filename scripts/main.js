@@ -132,35 +132,67 @@ generateBtn.addEventListener('click', async () => {
                     for (const line of lines) {
                         if (line.startsWith('data: ')) {
                             try {
-                                const data = JSON.parse(line.slice(6));
+                                const jsonString = line.slice(6).trim();
+                                
+                                // Skip empty lines
+                                if (!jsonString) continue;
+                                
+                                // Validate JSON format before parsing
+                                if (!jsonString.startsWith('{') || !jsonString.endsWith('}')) {
+                                    console.warn('Invalid JSON format detected:', jsonString);
+                                    continue;
+                                }
+                                
+                                const data = JSON.parse(jsonString);
+                                
+                                // Validate data structure
+                                if (!data || typeof data !== 'object' || !data.type) {
+                                    console.warn('Invalid data structure:', data);
+                                    continue;
+                                }
                                 
                                 switch (data.type) {
                                     case 'connected':
-                                        menuContainer.innerHTML = `<p>${data.message}</p>`;
+                                        menuContainer.innerHTML = `<p>${data.message || '连接已建立'}</p>`;
                                         break;
                                         
                                     case 'progress':
+                                        const progress = Math.max(0, Math.min(100, data.progress || 0));
                                         menuContainer.innerHTML = `
                                             <div class="progress-container">
-                                                <p>${data.message}</p>
+                                                <p>${data.message || '处理中...'}</p>
                                                 <div class="progress-bar">
-                                                    <div class="progress-fill" style="width: ${data.progress}%"></div>
+                                                    <div class="progress-fill" style="width: ${progress}%"></div>
                                                 </div>
-                                                <p class="progress-text">${data.progress}%</p>
+                                                <p class="progress-text">${progress}%</p>
                                             </div>
                                         `;
                                         break;
                                         
                                     case 'complete':
-                                        generatedData = data.data; // Save data globally
-                                        await renderMenuAsImage(data.data, selectedTemplate, imageWidth);
-                                        return; // Exit the function
+                                        if (data.data && typeof data.data === 'object') {
+                                            generatedData = data.data; // Save data globally
+                                            await renderMenuAsImage(data.data, selectedTemplate, imageWidth);
+                                            return; // Exit the function
+                                        } else {
+                                            throw new Error('Invalid completion data received');
+                                        }
                                         
                                     case 'error':
-                                        throw new Error(data.details || data.error);
+                                        throw new Error(data.details || data.error || 'Unknown error occurred');
+                                        
+                                    default:
+                                        console.warn('Unknown message type:', data.type);
                                 }
                             } catch (parseError) {
                                 console.error('解析流式数据失败:', parseError);
+                                console.error('原始数据:', line);
+                                
+                                // Continue processing other lines instead of breaking
+                                if (parseError.message.includes('Unexpected token')) {
+                                    console.warn('JSON格式错误，跳过此行继续处理');
+                                    continue;
+                                }
                             }
                         }
                     }

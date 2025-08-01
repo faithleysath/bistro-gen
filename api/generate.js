@@ -270,6 +270,144 @@ async function callGoogleAIStreaming(identity, apiKey, sendUpdate) {
         }],
         generationConfig: {
             response_mime_type: "application/json",
+            response_schema: {
+                type: "object",
+                properties: {
+                    "店铺名称": { 
+                        type: "string",
+                        description: "餐厅名称"
+                    },
+                    "Slogan（中）": { 
+                        type: "string",
+                        description: "中文标语"
+                    },
+                    "Slogan (EN)": { 
+                        type: "string",
+                        description: "英文标语"
+                    },
+                    "菜单": {
+                        type: "object",
+                        properties: {
+                            "Appetizers": {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        "菜品（中）": { 
+                                            type: "string",
+                                            description: "中文菜品名称"
+                                        },
+                                        "Dish (EN/FR)": { 
+                                            type: "string",
+                                            description: "英文或法文菜品名称"
+                                        },
+                                        "价格": { 
+                                            type: "string",
+                                            description: "菜品价格，格式如¥88"
+                                        },
+                                        "身份梗·哲学说明": { 
+                                            type: "string",
+                                            description: "菜品的哲学说明或身份梗描述"
+                                        }
+                                    },
+                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"],
+                                    additionalProperties: false
+                                },
+                                minItems: 2,
+                                maxItems: 3
+                            },
+                            "Main Courses": {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        "菜品（中）": { 
+                                            type: "string",
+                                            description: "中文菜品名称"
+                                        },
+                                        "Dish (EN/FR)": { 
+                                            type: "string",
+                                            description: "英文或法文菜品名称"
+                                        },
+                                        "价格": { 
+                                            type: "string",
+                                            description: "菜品价格，格式如¥128"
+                                        },
+                                        "身份梗·哲学说明": { 
+                                            type: "string",
+                                            description: "菜品的哲学说明或身份梗描述"
+                                        }
+                                    },
+                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"],
+                                    additionalProperties: false
+                                },
+                                minItems: 3,
+                                maxItems: 4
+                            },
+                            "Side Dishes": {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        "菜品（中）": { 
+                                            type: "string",
+                                            description: "中文菜品名称"
+                                        },
+                                        "Dish (EN/FR)": { 
+                                            type: "string",
+                                            description: "英文或法文菜品名称"
+                                        },
+                                        "价格": { 
+                                            type: "string",
+                                            description: "菜品价格，格式如¥68"
+                                        },
+                                        "身份梗·哲学说明": { 
+                                            type: "string",
+                                            description: "菜品的哲学说明或身份梗描述"
+                                        }
+                                    },
+                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"],
+                                    additionalProperties: false
+                                },
+                                minItems: 2,
+                                maxItems: 3
+                            },
+                            "Desserts": {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        "菜品（中）": { 
+                                            type: "string",
+                                            description: "中文菜品名称"
+                                        },
+                                        "Dish (EN/FR)": { 
+                                            type: "string",
+                                            description: "英文或法文菜品名称"
+                                        },
+                                        "价格": { 
+                                            type: "string",
+                                            description: "菜品价格，格式如¥88"
+                                        },
+                                        "身份梗·哲学说明": { 
+                                            type: "string",
+                                            description: "菜品的哲学说明或身份梗描述"
+                                        }
+                                    },
+                                    required: ["菜品（中）", "Dish (EN/FR)", "价格", "身份梗·哲学说明"],
+                                    additionalProperties: false
+                                },
+                                minItems: 3,
+                                maxItems: 4
+                            }
+                        },
+                        required: ["Appetizers", "Main Courses", "Side Dishes", "Desserts"],
+                        additionalProperties: false
+                    }
+                },
+                required: ["店铺名称", "Slogan（中）", "Slogan (EN)", "菜单"],
+                additionalProperties: false
+            }
         }
     };
 

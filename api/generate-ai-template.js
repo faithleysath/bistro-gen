@@ -331,7 +331,10 @@ data = {
                         }
                     }
                 ]
-            }]
+            }],
+            generationConfig: {
+                response_mime_type: "text/plain"
+            }
         };
     } else {
         // 处理文字描述
@@ -402,7 +405,10 @@ data = {
         requestBody = {
             contents: [{
                 parts: [{ text: prompt }]
-            }]
+            }],
+            generationConfig: {
+                response_mime_type: "text/plain"
+            }
         };
     }
 
